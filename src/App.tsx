@@ -1,4 +1,4 @@
-﻿// UBICACION: src/App.tsx
+// UBICACION: src/App.tsx
 import { useEffect, useRef, useState } from 'react'
 import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -119,7 +119,6 @@ export default function App() {
   const [cajaUtil, setCajaUtil] = useState<{ izq: number; ancho: number } | null>(null)
   const menu = useRef<HTMLElement>(null)
   const [borde, setBorde] = useState({ izq: 0, der: 0, ancho: 0 })
-  const [altoPie, setAltoPie] = useState(0)
   const [esEscritorio, setEsEscritorio] = useState(false)
   const ocultador = useRef<number | null>(null)
   const zonaVideo = useRef<HTMLDivElement>(null)
@@ -418,18 +417,6 @@ export default function App() {
     setEnPausa(true)
   }
 
-  // El pie se coloca a la derecha del video y la pildora justo encima: su alto
-  // se mide, no se estima, para que no se solapen al cambiar de idioma o tamano
-  useEffect(() => {
-    const e = pie.current
-    if (!e) return
-    const medir = () => setAltoPie(e.offsetHeight)
-    const observador = new ResizeObserver(medir)
-    observador.observe(e)
-    medir()
-    return () => observador.disconnect()
-  }, [])
-
   // El idioma y el video activos deben reflejarse en el documento y en la
   // direccion. Tambien cubre la entrada por la raiz, que no tiene camino valido
   useEffect(() => {
@@ -696,12 +683,12 @@ export default function App() {
       <img
         ref={logoCabecera}
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
-        src="/logo-app-place.webp"
+        src="/logo-proyectoespana.webp"
         alt="App Place Catalog"
-        width={256}
-        height={256}
+        width={600}
+        height={547}
         className={[
-          'absolute left-0 top-0 z-10 w-16 sm:w-32',
+          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[98px] sm:w-36',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       />
@@ -710,8 +697,8 @@ export default function App() {
         ref={sloganCabecera}
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
-          'absolute left-[70px] top-[11px] z-10 whitespace-pre-line text-center font-mono text-[0.825rem] uppercase leading-relaxed tracking-[0.2em] text-crema',
-          'sm:left-0 sm:top-[134px] sm:text-[0.75rem]',
+          'absolute left-[72px] right-[110px] top-[12px] z-10 whitespace-pre text-center font-mono text-[0.7rem] uppercase leading-snug tracking-[0.06em] text-crema',
+          'sm:left-0 sm:ml-[5px] sm:right-auto sm:top-[128px] sm:w-[330px] sm:text-[1.15rem] sm:tracking-[0.1em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       >
@@ -733,13 +720,13 @@ export default function App() {
           >
             <img
               ref={logoIntro}
-              src="/logo-app-place.webp"
+              src="/logo-proyectoespana.webp"
               alt=""
-              width={256}
-              height={256}
+              width={600}
+              height={547}
               style={intro === 'saliendo' ? { transform: viaje } : undefined}
               className={[
-                'w-[11.5rem] [image-rendering:pixelated] sm:w-[18.4rem]',
+                'w-full max-w-none sm:w-[23rem]',
                 intro === 'dentro'
                   ? 'intro-logo origin-center'
                   : 'origin-top-left transition-transform duration-[900ms] ease-[cubic-bezier(0.65,0,0.35,1)]'
@@ -774,29 +761,35 @@ export default function App() {
         } className="absolute bottom-1 left-2 z-20 flex flex-wrap items-center gap-x-1.5 gap-y-1 font-mono text-[0.7rem] tracking-[0.1em] text-muted/70 sm:bottom-2 sm:justify-start sm:text-left sm:text-xs">
         <span className="flex flex-none items-center gap-1.5 whitespace-nowrap">
           © {new Date().getFullYear()}
-          <img src="/logo-ap3c.webp" alt="ap3c.app" className="h-3.5 w-auto sm:h-3" />
+          <a href="https://xn--proyectoespaa-tkb.dev" className="text-crema/80 transition-colors hover:text-crema">proyectoespa&ntilde;a.dev</a>
         </span>
         <span className="w-full whitespace-nowrap text-[0.6rem] sm:w-auto sm:whitespace-normal sm:text-xs">
           {t('footer.rights')}
         </span>
       </footer>
-
-      <p
-        style={
-          esEscritorio && !pantallaCompleta
-            ? { left: borde.der + SEPARACION, bottom: altoPie + 16 }
-            : undefined
-        }
-        className="absolute bottom-1 right-1 z-10 rounded-full sm:right-auto border border-line bg-surface/60 px-3 py-1 text-center font-mono text-[0.6rem] uppercase leading-tight tracking-[0.16em] text-muted sm:right-0 sm:px-4 sm:py-[10px] sm:text-xs"
-      >
-        {t('hero.status')
-          .split('·')
-          .map((linea) => (
-            <span key={linea} className="block">
-              {`<${linea.trim()}>`}
-            </span>
-          ))}
-      </p>
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
