@@ -1,4 +1,4 @@
-﻿// UBICACION: src/rutas.ts
+// UBICACION: src/rutas.ts
 import type { SupportedLanguage } from './i18n'
 import slugs from './slugs.json'
 
@@ -13,7 +13,7 @@ export const SLUGS: Record<SupportedLanguage, readonly string[]> = slugs.princip
 export const SLUGS_APPS: Record<SupportedLanguage, readonly string[]> = slugs.apps
 
 // APPS no reproduce nada: abre su propio submenu, colgado de su misma direccion
-export const APPS = SLUGS.en.indexOf('apps')
+export const APPS = SLUGS.en.indexOf('active-campaigns')
 
 export type Destino = {
   idioma: SupportedLanguage
@@ -49,3 +49,4 @@ export function leerRuta(camino: string): Destino | null {
   const sub = SLUGS_APPS[idioma].indexOf(slugApp)
   return sub === -1 ? null : { idioma, indice, sub }
 }
+

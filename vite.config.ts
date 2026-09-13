@@ -21,7 +21,7 @@ const TABLA = JSON.parse(
 ) as { principal: Record<Idioma, string[]>; apps: Record<Idioma, string[]> }
 const SLUGS = TABLA.principal
 const SLUGS_APPS = TABLA.apps
-const APPS = SLUGS.en.indexOf('apps')
+const APPS = SLUGS.en.indexOf('active-campaigns')
 
 function leerDiccionario(idioma: Idioma) {
   const crudo = readFileSync(join(RAIZ, 'src', 'locales', `${idioma}.json`), 'utf8')
@@ -143,4 +143,5 @@ export default defineConfig({
     sourcemap: false
   }
 })
+
 

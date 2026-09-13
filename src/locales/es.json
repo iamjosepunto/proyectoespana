@@ -32,24 +32,14 @@
     "exitFullscreen": "Salir de pantalla completa"
   },
   "videos": {
-    "v0": "Requisitos",
-    "v1": "Empezar",
-    "v2": "Apps",
-    "v3": "Cambiar idioma",
-    "v4": "Subir una imagen",
-    "v5": "Cambiar imagen de perfil",
-    "v6": "Cambiar nickname",
-    "v7": "Ubicación",
-    "v8": "Cerrar sesión",
-    "v9": "Warnings",
-    "v10": "Contacto",
-    "v11": "Eliminar cuenta"
+    "v0": "Introducción",
+    "v1": "Campañas activas"
   },
   "apps": {
     "volver": "Volver",
-    "love-and-friends": "Love & Friends",
-    "languages": "Languages"
+    "caballas": "Caballas"
   }
 }
+
 
 

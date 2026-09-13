@@ -11,15 +11,15 @@ const VELOCIDADES = [1, 1.5, 2, 3, 4]
 
 const PORTADAS: Record<SupportedLanguage, string[]> = {
   // El numero del archivo es el del tutorial, que empieza en 1, no en 0
-  en: Array.from({ length: 12 }, (_, i) => `/portada-${String(i + 1).padStart(2, '0')}-en.webp`),
-  es: Array.from({ length: 12 }, (_, i) => `/portada-${String(i + 1).padStart(2, '0')}-es.webp`)
+  en: ['/portada-construccion.webp', '/portada-construccion.webp'],
+  es: ['/portada-construccion.webp', '/portada-construccion.webp']
 }
 
 // Las dos apps llevan su portada por nombre y no por numero: asi no hay que
 // rehacerlas si algun dia cambia la posicion de APPS en la lista
 const PORTADAS_APPS: Record<SupportedLanguage, string[]> = {
-  en: ['/portada-03-1-en.webp', '/portada-03-2-en.webp'],
-  es: ['/portada-03-1-es.webp', '/portada-03-2-es.webp']
+  en: ['/portada-construccion.webp'],
+  es: ['/portada-construccion.webp']
 }
 
 // La portada depende del idioma activo; un idioma inesperado cae al ingles
@@ -82,7 +82,7 @@ function claseBoton(activo: boolean, creciendo = true) {
     'flex cursor-pointer items-center rounded-sm px-1.5 py-1 text-left font-mono text-[0.66rem] uppercase leading-tight tracking-[0.08em]',
     // En el submenu solo hay tres botones: conservan el alto de una fila de las
     // doce y el resto de la columna queda vacio
-    creciendo ? 'flex-1' : 'flex-none basis-[calc(100%/12)]',
+    creciendo ? 'flex-none basis-[calc(100%/12)]' : 'flex-none basis-[calc(100%/12)]',
     'transition-colors sm:px-3 sm:py-2 sm:text-[1.05rem] sm:tracking-[0.14em]',
     'border-l-[3px]',
     activo
@@ -489,14 +489,10 @@ export default function App() {
                   className={
                     i === 0
                       ? 'min-w-0 hyphens-auto break-words'
-                      : // APPs lleva la ese minuscula a proposito, asi que este
-                        // boton no puede heredar el uppercase de los demas
-                        i === APPS
-                        ? 'normal-case'
-                        : undefined
+                      : undefined
                   }
                 >
-                  {i === APPS ? 'APPs >>' : t(`videos.v${i}`)}
+                  {i === APPS ? `${t('videos.v' + i)} >>` : t(`videos.v${i}`)}
                 </span>
               </button>
             ))}
@@ -770,6 +766,12 @@ export default function App() {
     </div>
   )
 }
+
+
+
+
+
+
 
 
 

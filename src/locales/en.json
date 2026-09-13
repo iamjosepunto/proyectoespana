@@ -32,24 +32,14 @@
     "exitFullscreen": "Exit fullscreen"
   },
   "videos": {
-    "v0": "Requirements",
-    "v1": "Start",
-    "v2": "Apps",
-    "v3": "Change language",
-    "v4": "Upload an image",
-    "v5": "Change profile picture",
-    "v6": "Change nickname",
-    "v7": "Location",
-    "v8": "Sign out",
-    "v9": "Warnings",
-    "v10": "Contact",
-    "v11": "Delete account"
+    "v0": "Introduction",
+    "v1": "Active campaigns"
   },
   "apps": {
     "volver": "Back",
-    "love-and-friends": "Love & Friends",
-    "languages": "Languages"
+    "caballas": "Caballas"
   }
 }
+
 
 

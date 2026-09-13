@@ -1,42 +1,10 @@
 {
   "principal": {
-    "en": [
-      "requirements",
-      "start",
-      "apps",
-      "change-language",
-      "upload-an-image",
-      "change-profile-picture",
-      "change-nickname",
-      "location",
-      "sign-out",
-      "warnings",
-      "contact",
-      "delete-account"
-    ],
-    "es": [
-      "requisitos",
-      "empezar",
-      "apps",
-      "cambiar-idioma",
-      "subir-una-imagen",
-      "cambiar-imagen-de-perfil",
-      "cambiar-nickname",
-      "ubicacion",
-      "cerrar-sesion",
-      "warnings",
-      "contacto",
-      "eliminar-cuenta"
-    ]
+    "en": ["introduction", "active-campaigns"],
+    "es": ["introduccion", "campanas-activas"]
   },
   "apps": {
-    "en": [
-      "love-and-friends",
-      "languages"
-    ],
-    "es": [
-      "love-and-friends",
-      "languages"
-    ]
+    "en": ["caballas"],
+    "es": ["caballas"]
   }
 }
