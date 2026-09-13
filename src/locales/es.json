@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "title": "App Place Catalog - Instala una. Disfruta todas",
+    "description": "App Place Catalog reúne varias aplicaciones dentro de una sola app para Android. Proyecto en desarrollo."
+  },
+  "hero": {
+    "eyebrow": "ap3c.app",
+    "title": "App Place",
+    "tagline": "El objetivo de esta web es explicarte cómo puedes disfrutar de nuestras mejores aplicaciones (aprender idiomas, conocer nuevas personas, etc) instalándote únicamente nuestra app desde Google Play Store.",
+    "status": "En desarrollo · Android",
+    "loading": "Cargando vídeo",
+    "welcome": "Bienvenido a la web de nuestra app android APP PLACE CATALOG:",
+    "accept": "ENTENDIDO",
+    "slogan": "Instala una\nDisfruta todas"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "Inglés"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados"
+  },
+  "controls": {
+    "stop": "Detener",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "faster": "Más rápido",
+    "timeline": "Línea de tiempo",
+    "drag": "Arrastra para mover el panel",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa"
+  },
+  "videos": {
+    "v0": "Requisitos",
+    "v1": "Empezar",
+    "v2": "Apps",
+    "v3": "Cambiar idioma",
+    "v4": "Subir una imagen",
+    "v5": "Cambiar imagen de perfil",
+    "v6": "Cambiar nickname",
+    "v7": "Ubicación",
+    "v8": "Cerrar sesión",
+    "v9": "Warnings",
+    "v10": "Contacto",
+    "v11": "Eliminar cuenta"
+  },
+  "apps": {
+    "volver": "Volver",
+    "love-and-friends": "Love & Friends",
+    "languages": "Languages"
+  }
+}

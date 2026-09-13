@@ -1,0 +1,133 @@
+﻿/* UBICACION: src/index.css */
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Sora Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-fondo: #111d33;
+  --color-deep: #0b1425;
+  --color-surface: #17263f;
+  --color-line: #26385c;
+  --color-ink: #eaf0fa;
+  --color-muted: #8fa1c0;
+  --color-accent: #e3a94a;
+  --color-crema: #f3ebda;
+  --color-logo: #0374df;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-fondo);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+}
+
+/* Reticulo de fondo: el "lugar" sobre el que se apoyan las apps */
+.field {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center center;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 10%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 10%, transparent 78%);
+}
+
+/* Halo calido que separa el contenido del reticulo */
+.halo {
+  background: radial-gradient(ellipse 60% 45% at 50% 42%, rgb(227 169 74 / 0.09), transparent 70%);
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes parpadeo {
+  0%,
+  100% {
+    color: var(--color-accent);
+  }
+  50% {
+    color: var(--color-ink);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .parpadeo {
+    animation: parpadeo 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes intro-logo {
+  from {
+    opacity: 0;
+    transform: scale(0.06);
+  }
+  12% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes intro-slogan {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro-logo {
+    animation: intro-logo 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) both;
+  }
+
+  .intro-slogan {
+    animation: intro-slogan 0.7s cubic-bezier(0.22, 1, 0.36, 1) 4.6s both;
+  }
+}

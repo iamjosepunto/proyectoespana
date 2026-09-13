@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "title": "App Place Catalog - Install one. Enjoy them all",
+    "description": "App Place Catalog brings several applications together inside a single Android app. Project in development."
+  },
+  "hero": {
+    "eyebrow": "ap3c.app",
+    "title": "App Place",
+    "tagline": "The purpose of this website is to explain how you can enjoy our best applications (learning languages, meeting new people, etc.) by installing only our app from the Google Play Store.",
+    "status": "In development · Android",
+    "loading": "Loading video",
+    "welcome": "Welcome to the website of our Android app APP PLACE CATALOG:",
+    "accept": "GOT IT",
+    "slogan": "Install one\nEnjoy them all"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Spanish",
+    "en": "English"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  },
+  "controls": {
+    "stop": "Stop",
+    "play": "Play",
+    "pause": "Pause",
+    "faster": "Faster",
+    "timeline": "Timeline",
+    "drag": "Drag to move the panel",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen"
+  },
+  "videos": {
+    "v0": "Requirements",
+    "v1": "Start",
+    "v2": "Apps",
+    "v3": "Change language",
+    "v4": "Upload an image",
+    "v5": "Change profile picture",
+    "v6": "Change nickname",
+    "v7": "Location",
+    "v8": "Sign out",
+    "v9": "Warnings",
+    "v10": "Contact",
+    "v11": "Delete account"
+  },
+  "apps": {
+    "volver": "Back",
+    "love-and-friends": "Love & Friends",
+    "languages": "Languages"
+  }
+}
