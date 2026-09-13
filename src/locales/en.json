@@ -11,7 +11,7 @@
     "loading": "Loading video",
     "welcome": "Welcome to the website of our Android app APP PLACE CATALOG:",
     "accept": "GOT IT",
-    "slogan": "Equip the Sentinels\nSo the world knows"
+    "slogan": "Equip the Sentinels!\nSo the world knows!"
   },
   "language": {
     "label": "Language",
@@ -51,4 +51,5 @@
     "languages": "Languages"
   }
 }
+
 

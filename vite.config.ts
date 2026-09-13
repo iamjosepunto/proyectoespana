@@ -70,7 +70,7 @@ function paginaDe(plantilla: string, idioma: Idioma, indice: number, sub: number
   const alternas = [
     `<link rel="alternate" hreflang="${idioma}" href="${url}" />`,
     `<link rel="alternate" hreflang="${alterno}" href="${DOMINIO}/${alterno}/${SLUGS[alterno][indice]}${sub === null ? '' : `/${SLUGS_APPS[alterno][sub]}`}" />`,
-    `<link rel="alternate" hreflang="x-default" href="${DOMINIO}/en/${SLUGS.en[indice]}${sub === null ? '' : `/${SLUGS_APPS.en[sub]}`}" />`
+    `<link rel="alternate" hreflang="x-default" href="${DOMINIO}/es/${SLUGS.es[indice]}${sub === null ? '' : `/${SLUGS_APPS.es[sub]}`}" />`
   ].join('\n    ')
 
   return html.replace(/<\/head>/i, `  ${alternas}\n  </head>`)
@@ -115,12 +115,12 @@ function prerenderizar(): Plugin {
         })
       }
 
-      // La raiz apunta a la primera seccion en ingles para no duplicar contenido
+      // La raiz apunta a la primera seccion en espanol para no duplicar contenido
       writeFileSync(
         raiz,
         plantilla.replace(
           /<link\s+rel="canonical"[\s\S]*?\/?>/i,
-          `<link rel="canonical" href="${DOMINIO}/en/${SLUGS.en[0]}" />`
+          `<link rel="canonical" href="${DOMINIO}/es/${SLUGS.es[0]}" />`
         ),
         'utf8'
       )
@@ -143,3 +143,4 @@ export default defineConfig({
     sourcemap: false
   }
 })
+

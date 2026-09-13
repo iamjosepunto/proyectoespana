@@ -1,4 +1,4 @@
-﻿// UBICACION: src/components/LanguageSwitcher.tsx
+// UBICACION: src/components/LanguageSwitcher.tsx
 import { useTranslation } from 'react-i18next'
 import { SUPPORTED_LANGUAGES } from '../i18n'
 import type { SupportedLanguage } from '../i18n'
@@ -14,7 +14,7 @@ export default function LanguageSwitcher() {
 
   return (
     <nav aria-label={t('language.label')} className="flex items-center gap-0 sm:flex-col sm:items-start sm:gap-1">
-      {SUPPORTED_LANGUAGES.map((code) => {
+      {[...SUPPORTED_LANGUAGES].reverse().map((code) => {
         const active = current === code
         return (
           <button
@@ -46,3 +46,4 @@ export default function LanguageSwitcher() {
     </nav>
   )
 }
+
