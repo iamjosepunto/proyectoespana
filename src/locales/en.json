@@ -1,4 +1,4 @@
-{
+﻿{
   "meta": {
     "title": "App Place Catalog - Install one. Enjoy them all",
     "description": "App Place Catalog brings several applications together inside a single Android app. Project in development."
@@ -21,7 +21,7 @@
   },
   "subs": {
     "volver": "Back",
-    "what-it-is": "What ProyectoEspaña is",
+    "what-it-is": "What ProyectoEspaña.dev is",
     "sentinels": "Who the Sentinels are",
     "take-part": "How to take part",
     "caballas": "Caballas"
@@ -31,7 +31,7 @@
     "siguiente": "Next",
     "what-it-is": {
       "p1": {
-        "titulo": "What it is",
+        "titulo": "What ProyectoEspaña.dev is",
         "texto": "ProyectoEspaña.dev is a private initiative that equips the people who document what happens on Spanish soil and tell the world about it."
       },
       "p2": {
@@ -67,6 +67,24 @@
       "p4": {
         "titulo": "What makes it work",
         "texto": "Nothing forces a Sentinel to deliver except the thing they value most: their credibility. Everything is public, and anyone who takes gear from a campaign and does not use it does so in front of their own community. That is why a track record is required: the gear goes to people who already have a reputation to protect. And if something gets in the way, an accident or an illness, that is misfortune, not deceit."
+      }
+    },
+    "take-part": {
+      "p1": {
+        "titulo": "What to send",
+        "texto": "Who you are, where you publish and the community you have. Links to coverage you have already done on the ground. And what gear you are missing to tell it better."
+      },
+      "p2": {
+        "titulo": "How it is reviewed",
+        "texto": "The public track record is what counts: what you have covered, with what means and in front of whom. If the application fits, you get an answer at the same address."
+      },
+      "p3": {
+        "titulo": "What happens next",
+        "texto": "If it goes ahead, a campaign opens in your name: what gear it needs, for whom and what for. It is funded by whoever wants the world to know."
+      },
+      "p4": {
+        "titulo": "Where to send it",
+        "texto": "iamjosepunto@gmail.com, with the subject “Sentinel application”. One single address, no forms and no middlemen."
       }
     }
   }

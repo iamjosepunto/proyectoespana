@@ -1,4 +1,4 @@
-// UBICACION: src/App.tsx
+﻿// UBICACION: src/App.tsx
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from './components/LanguageSwitcher'
@@ -23,13 +23,19 @@ type Panel = { clave: string; imagen: string | null }
 
 const PANELES: Record<string, Panel[]> = {
   'what-it-is': [
+    { clave: 'p1', imagen: '/que-es.webp' },
+    { clave: 'p2', imagen: '/por-que.webp' },
+    { clave: 'p3', imagen: '/impedimentos.webp' },
+    { clave: 'p4', imagen: '/equipo.webp' },
+    { clave: 'p5', imagen: '/financiacion.webp' }
+  ],
+  sentinels: [
     { clave: 'p1', imagen: null },
     { clave: 'p2', imagen: null },
     { clave: 'p3', imagen: null },
-    { clave: 'p4', imagen: null },
-    { clave: 'p5', imagen: null }
+    { clave: 'p4', imagen: null }
   ],
-  sentinels: [
+  'take-part': [
     { clave: 'p1', imagen: null },
     { clave: 'p2', imagen: null },
     { clave: 'p3', imagen: null },
@@ -173,7 +179,15 @@ function EscenaIntroduccion({
 
 // Carrusel de una subruta: una imagen, su texto y navegacion ciclica. Las
 // medidas van en cqw para que todo escale con el ancho de la caja
-function Carrusel({ ruta, paneles }: { ruta: string; paneles: Panel[] }) {
+function Carrusel({
+  ruta,
+  paneles,
+  alVolver
+}: {
+  ruta: string
+  paneles: Panel[]
+  alVolver: (() => void) | null
+}) {
   const { t } = useTranslation()
   const [i, setI] = useState(0)
   const total = paneles.length
@@ -196,8 +210,8 @@ function Carrusel({ ruta, paneles }: { ruta: string; paneles: Panel[] }) {
           <img
             src={panel.imagen}
             alt={t(`${base}.titulo`)}
-            width={1200}
-            height={1200}
+            width={900}
+            height={900}
             className="aspect-square w-full object-cover"
           />
         ) : (
@@ -213,11 +227,11 @@ function Carrusel({ ruta, paneles }: { ruta: string; paneles: Panel[] }) {
       <div className="flex-1 overflow-hidden" style={{ padding: '5cqw' }}>
         <h2
           className="font-mono uppercase text-accent"
-          style={{ fontSize: '4.6cqw', letterSpacing: '0.08em', marginBottom: '2.5cqw' }}
+          style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '2.5cqw' }}
         >
           {t(`${base}.titulo`)}
         </h2>
-        <p className="text-crema/85" style={{ fontSize: '4cqw', lineHeight: 1.65 }}>
+        <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
           {t(`${base}.texto`)}
         </p>
       </div>
@@ -226,42 +240,55 @@ function Carrusel({ ruta, paneles }: { ruta: string; paneles: Panel[] }) {
         className="flex items-center justify-between border-t border-line/60"
         style={{ padding: '3cqw 5cqw' }}
       >
-        <button
-          type="button"
-          onClick={() => ir(-1)}
-          aria-label={t('paneles.anterior')}
-          className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
-          style={{ fontSize: '6cqw', lineHeight: 1 }}
-        >
-          &lt;
-        </button>
+        {alVolver && (
+          <button
+            type="button"
+            onClick={alVolver}
+            className="cursor-pointer font-mono uppercase text-crema transition-colors hover:text-accent"
+            style={{ fontSize: '4cqw', letterSpacing: '0.1em', lineHeight: 1 }}
+          >
+            {`<< ${t('subs.volver')}`}
+          </button>
+        )}
 
-        <div className="flex" style={{ gap: '2.2cqw' }}>
-          {paneles.map((p, n) => (
-            <button
-              key={p.clave}
-              type="button"
-              onClick={() => setI(n)}
-              aria-label={`${n + 1}`}
-              aria-current={n === i ? 'true' : undefined}
-              className={[
-                'cursor-pointer rounded-full transition-colors',
-                n === i ? 'bg-accent' : 'bg-line hover:bg-crema/60'
-              ].join(' ')}
-              style={{ width: '2.4cqw', height: '2.4cqw' }}
-            />
-          ))}
+        <div className="ml-auto flex items-center" style={{ gap: '3.5cqw' }}>
+          <button
+            type="button"
+            onClick={() => ir(-1)}
+            aria-label={t('paneles.anterior')}
+            className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
+            style={{ fontSize: '6cqw', lineHeight: 1 }}
+          >
+            &lt;
+          </button>
+
+          <div className="flex" style={{ gap: '2.2cqw' }}>
+            {paneles.map((p, n) => (
+              <button
+                key={p.clave}
+                type="button"
+                onClick={() => setI(n)}
+                aria-label={`${n + 1}`}
+                aria-current={n === i ? 'true' : undefined}
+                className={[
+                  'cursor-pointer rounded-full transition-colors',
+                  n === i ? 'bg-accent' : 'bg-line hover:bg-crema/60'
+                ].join(' ')}
+                style={{ width: '2.4cqw', height: '2.4cqw' }}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => ir(1)}
+            aria-label={t('paneles.siguiente')}
+            className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
+            style={{ fontSize: '6cqw', lineHeight: 1 }}
+          >
+            &gt;
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => ir(1)}
-          aria-label={t('paneles.siguiente')}
-          className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
-          style={{ fontSize: '6cqw', lineHeight: 1 }}
-        >
-          &gt;
-        </button>
       </div>
     </div>
   )
@@ -384,6 +411,13 @@ export default function App() {
   const elegirSub = (sub: number) => {
     mostrar(seccion, sub)
     window.history.pushState(null, '', rutaDe(language, seccion, sub))
+  }
+
+  // Las subrutas a las que solo se llega desde la escena no tienen entrada en el
+  // menu izquierdo: el boton del carrusel es su unica salida de vuelta
+  const volverAEscena = () => {
+    mostrar(seccion, null)
+    window.history.pushState(null, '', rutaDe(language, seccion, null))
   }
 
   // VOLVER cierra el submenu y baja al primer punto de la lista: la seccion con
@@ -518,7 +552,12 @@ export default function App() {
         )}
 
         {!conEscena && !sinMedia && rutaSub && PANELES[rutaSub] && (
-          <Carrusel key={rutaSub} ruta={rutaSub} paneles={PANELES[rutaSub]} />
+          <Carrusel
+            key={rutaSub}
+            ruta={rutaSub}
+            paneles={PANELES[rutaSub]}
+            alVolver={abreSubmenu(seccion) ? null : volverAEscena}
+          />
         )}
 
         {!conEscena && !sinMedia && !(rutaSub && PANELES[rutaSub]) && (
@@ -620,3 +659,5 @@ export default function App() {
     </div>
   )
 }
+
+

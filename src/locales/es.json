@@ -1,4 +1,4 @@
-{
+﻿{
   "meta": {
     "title": "App Place Catalog - Instala una. Disfruta todas",
     "description": "App Place Catalog reúne varias aplicaciones dentro de una sola app para Android. Proyecto en desarrollo."
@@ -21,7 +21,7 @@
   },
   "subs": {
     "volver": "Volver",
-    "what-it-is": "Qué es ProyectoEspaña",
+    "what-it-is": "Qué es ProyectoEspaña.dev",
     "sentinels": "Quiénes son los Centinelas",
     "take-part": "Cómo participar",
     "caballas": "Caballas"
@@ -31,7 +31,7 @@
     "siguiente": "Siguiente",
     "what-it-is": {
       "p1": {
-        "titulo": "Qué es",
+        "titulo": "Qué es ProyectoEspaña.dev",
         "texto": "ProyectoEspaña.dev es una iniciativa privada que equipa a quienes documentan lo que ocurre en territorio español y lo cuentan al mundo."
       },
       "p2": {
@@ -67,6 +67,24 @@
       "p4": {
         "titulo": "Qué garantiza que se use",
         "texto": "Nada obliga a un Centinela a cumplir, salvo lo que más le importa: su credibilidad. Todo es público, y quien recibe equipo de una campaña y no lo usa lo hace delante de su propia comunidad. Por eso se pide trayectoria previa: el equipo llega a quien ya tiene una reputación que cuidar. Y si algo lo impide, un accidente o una enfermedad, es una desgracia, no un engaño."
+      }
+    },
+    "take-part": {
+      "p1": {
+        "titulo": "Qué hay que enviar",
+        "texto": "Quién eres, dónde publicas y con qué comunidad. Enlaces a coberturas que ya hayas hecho sobre el terreno. Y qué equipo te falta para contar mejor lo que cuentas."
+      },
+      "p2": {
+        "titulo": "Cómo se revisa",
+        "texto": "Se mira la trayectoria pública: qué has cubierto, con qué medios y delante de quién. Si la candidatura encaja, se contesta al mismo correo."
+      },
+      "p3": {
+        "titulo": "Qué pasa después",
+        "texto": "Si sale adelante, se abre una campaña con tu nombre: qué equipo necesita, para quién y para qué. La financia quien quiera que se sepa lo que pasa."
+      },
+      "p4": {
+        "titulo": "Dónde se envía",
+        "texto": "iamjosepunto@gmail.com, con asunto «Candidatura Centinela». Una sola dirección, sin formularios ni intermediarios."
       }
     }
   }
