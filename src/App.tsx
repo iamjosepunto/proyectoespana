@@ -713,7 +713,7 @@ export default function App() {
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
           'absolute left-[72px] right-[110px] top-[20px] z-10 whitespace-pre text-center font-mono text-[0.78rem] uppercase leading-snug tracking-[0.06em] text-crema',
-          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[271px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
+          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[236px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       >
@@ -731,7 +731,7 @@ export default function App() {
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 px-6"
+            className="pointer-events-none fixed inset-0 z-50 flex flex-col items-center justify-center gap-0 px-6"
           >
             <img
               ref={logoIntro}
@@ -751,7 +751,7 @@ export default function App() {
               ref={sloganIntro}
               style={intro === 'saliendo' ? { transform: viajeSlogan } : undefined}
               className={[
-                'origin-top-left whitespace-pre-line text-center font-mono text-base uppercase leading-relaxed tracking-[0.2em] text-crema sm:text-2xl',
+                '-mt-9 origin-top-left whitespace-pre-line text-center font-mono text-base uppercase leading-relaxed tracking-[0.2em] text-crema sm:text-2xl',
                 intro === 'dentro'
                   ? 'intro-slogan'
                   : 'transition-transform duration-[900ms] ease-[cubic-bezier(0.65,0,0.35,1)]'
