@@ -357,7 +357,7 @@ export default function App() {
         width={600}
         height={547}
         className={[
-          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[60px] sm:w-36',
+          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[63px] sm:w-36',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       />
@@ -367,7 +367,7 @@ export default function App() {
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
           'absolute left-[72px] right-[110px] top-[20px] z-10 whitespace-pre text-center font-mono text-[0.78rem] uppercase leading-snug tracking-[0.06em] text-crema',
-          'sm:left-0 sm:ml-[5px] sm:right-auto sm:top-[128px] sm:w-[263px] sm:text-[0.93rem] sm:tracking-[0.1em]',
+          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[136px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       >
@@ -428,17 +428,32 @@ export default function App() {
             ? { left: borde.der + SEPARACION, maxWidth: borde.ancho }
             : undefined
         } className="absolute bottom-1 left-[70px] right-0 z-20 flex flex-col items-center gap-y-0.5 font-mono text-[0.7rem] tracking-[0.1em] text-muted/70 sm:bottom-2 sm:left-2 sm:right-auto sm:items-start sm:text-left sm:text-xs">
-        <span className="order-2 flex items-center gap-1.5 whitespace-nowrap sm:order-1">
-          © {new Date().getFullYear()}
-          <span className="text-[0.6rem] sm:hidden">{t('footer.rights')}</span></span><span className="order-1 flex items-center gap-1.5 whitespace-nowrap sm:order-2">By<a href="https://iamjosepunto.github.io" target="_blank" rel="noopener noreferrer" className="text-crema/80 transition-colors hover:text-crema">IamJosePunto.GitHub.io</a>
+        <span className="order-2 flex items-center whitespace-nowrap">
+          {`©${new Date().getFullYear()}`}
+          <span className="ml-1.5 text-[0.6rem] sm:text-xs">{t('footer.rights')}</span></span><span className="order-1 flex items-center gap-1.5 whitespace-nowrap">By<a href="https://iamjosepunto.github.io" target="_blank" rel="noopener noreferrer" className="text-crema/80 transition-colors hover:text-crema">IamJosePunto.GitHub.io</a>
         </span>
-        <span className="order-3 hidden whitespace-nowrap sm:block sm:text-xs">
+        <span className="hidden">
           {t('footer.rights')}
         </span>
       </footer>
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
