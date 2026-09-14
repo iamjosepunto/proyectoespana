@@ -28,6 +28,12 @@ const PANELES: Record<string, Panel[]> = {
     { clave: 'p3', imagen: null },
     { clave: 'p4', imagen: null },
     { clave: 'p5', imagen: null }
+  ],
+  sentinels: [
+    { clave: 'p1', imagen: null },
+    { clave: 'p2', imagen: null },
+    { clave: 'p3', imagen: null },
+    { clave: 'p4', imagen: null }
   ]
 }
 

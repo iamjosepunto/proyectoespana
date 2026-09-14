@@ -50,6 +50,24 @@
         "titulo": "Cómo se financia",
         "texto": "Con campañas de micromecenazgo. Cada una define qué equipo necesita, para quién y para qué."
       }
+    },
+    "sentinels": {
+      "p1": {
+        "titulo": "Quién es un Centinela",
+        "texto": "Personas que ya cuentan lo que pasa. Tienen comunidad propia en redes y una trayectoria demostrable documentando sucesos con sus propios medios."
+      },
+      "p2": {
+        "titulo": "Qué se pide",
+        "texto": "Al menos 10.000 seguidores en una plataforma y un historial público de cobertura sobre el terreno. La cifra no es una puerta: cuenta más la trayectoria que el número."
+      },
+      "p3": {
+        "titulo": "Qué recibe",
+        "texto": "El equipo que la campaña haya financiado, en propiedad. No es un préstamo ni hay que devolverlo: es suyo y lo seguirá usando cuando la campaña termine."
+      },
+      "p4": {
+        "titulo": "Qué garantiza que se use",
+        "texto": "Nada obliga a un Centinela a cumplir, salvo lo que más le importa: su credibilidad. Todo es público, y quien recibe equipo de una campaña y no lo usa lo hace delante de su propia comunidad. Por eso se pide trayectoria previa: el equipo llega a quien ya tiene una reputación que cuidar. Y si algo lo impide, un accidente o una enfermedad, es una desgracia, no un engaño."
+      }
     }
   }
 }

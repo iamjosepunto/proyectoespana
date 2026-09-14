@@ -50,6 +50,24 @@
         "titulo": "How it is funded",
         "texto": "Through crowdfunding campaigns. Each one states what gear it needs, for whom and what for."
       }
+    },
+    "sentinels": {
+      "p1": {
+        "titulo": "Who a Sentinel is",
+        "texto": "People who already tell what is happening. They have their own community on social media and a provable track record documenting events with their own means."
+      },
+      "p2": {
+        "titulo": "What is asked",
+        "texto": "At least 10,000 followers on one platform and a public history of coverage on the ground. The figure is not a gate: the track record counts more than the number."
+      },
+      "p3": {
+        "titulo": "What they receive",
+        "texto": "The gear the campaign funded, as their own property. It is not a loan and there is nothing to give back: it is theirs and they will keep using it once the campaign ends."
+      },
+      "p4": {
+        "titulo": "What makes it work",
+        "texto": "Nothing forces a Sentinel to deliver except the thing they value most: their credibility. Everything is public, and anyone who takes gear from a campaign and does not use it does so in front of their own community. That is why a track record is required: the gear goes to people who already have a reputation to protect. And if something gets in the way, an accident or an illness, that is misfortune, not deceit."
+      }
     }
   }
 }
