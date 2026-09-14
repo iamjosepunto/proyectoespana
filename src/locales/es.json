@@ -28,7 +28,7 @@
   },
   "contacto": {
     "titulo": "Contacto",
-    "texto": "Una sola dirección para todo: candidaturas a Centinela, ofrecimientos de equipo o de ayuda técnica, y cualquier duda sobre cómo funciona el proyecto. Se contesta desde ahí mismo.",
+    "texto": "Una sola dirección de email de contacto para todo: candidaturas a Centinela, ofrecimientos de equipo o de ayuda técnica, y cualquier duda sobre cómo funciona el proyecto. Se contesta desde ahí mismo.",
     "copiar": "Copiar email de contacto",
     "copiado": "Email copiado"
   },
@@ -95,7 +95,7 @@
       },
       "p4": {
         "titulo": "Dónde se envía",
-        "texto": "A esta dirección, con el asunto «Candidatura Centinela». Sin formularios ni intermediarios."
+        "texto": "Envía un correo electrónico a la dirección que aparece más adelante, con el asunto «Candidatura Centinela». Sin formularios ni intermediarios."
       }
     }
   }

@@ -28,7 +28,7 @@
   },
   "contacto": {
     "titulo": "Contact",
-    "texto": "One single address for everything: Sentinel applications, offers of gear or technical help, and any question about how the project works. It is answered from there.",
+    "texto": "One single contact email address for everything: Sentinel applications, offers of gear or technical help, and any question about how the project works. It is answered from there.",
     "copiar": "Copy contact email",
     "copiado": "Email copied"
   },
@@ -87,7 +87,7 @@
       },
       "p2": {
         "titulo": "How it is reviewed",
-        "texto": "The public track record is what counts: what you have covered, with what means and in front of whom. If the application fits, you get an answer at the same address."
+        "texto": "The public track record is what counts: what you have covered, with what means and in front of whom. If the application fits, you get an answer at the same contact email address."
       },
       "p3": {
         "titulo": "What happens next",
@@ -95,7 +95,7 @@
       },
       "p4": {
         "titulo": "Where to send it",
-        "texto": "To this address, with the subject “Sentinel application”. No forms and no middlemen."
+        "texto": "Send an email to the address shown below, with the subject “Sentinel application”. No forms and no middlemen."
       }
     }
   }

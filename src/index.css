@@ -1,4 +1,4 @@
-﻿/* UBICACION: src/index.css */
+/* UBICACION: src/index.css */
 @import "tailwindcss";
 
 @theme {
@@ -14,6 +14,7 @@
   --color-muted: #8fa1c0;
   --color-accent: #e3a94a;
   --color-crema: #f3ebda;
+  --color-enlace: #6db4f2;
   --color-logo: #0374df;
 }
 

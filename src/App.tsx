@@ -132,29 +132,8 @@ function EscenaIntroduccion({
       className="h-full w-full border border-crema"
     >
       <rect width="720" height="1606" fill="var(--color-fondo)" />
-      <circle cx="360" cy="430" r="298" fill="none" stroke="var(--color-accent)" strokeWidth="9" />
 
-      <g fill="var(--color-line)">
-        <rect x="40" y="520" width="44" height="210" />
-        <rect x="98" y="452" width="36" height="278" />
-        <rect x="148" y="560" width="54" height="170" />
-        <rect x="524" y="482" width="40" height="248" />
-        <rect x="578" y="546" width="50" height="184" />
-        <rect x="642" y="440" width="32" height="290" />
-      </g>
-
-      <image x="180" y="248" width="360" height="328" href="/logo-proyectoespana.webp" />
-
-      <path
-        d="M0 748 Q90 712 180 748 T360 748 T540 748 T720 748 V820 H0 Z"
-        fill="var(--color-surface)"
-      />
-      <path
-        d="M0 796 Q90 760 180 796 T360 796 T540 796 T720 796"
-        fill="none"
-        stroke="var(--color-accent)"
-        strokeWidth="7"
-      />
+      <image x="0" y="70" width="720" height="720" href="/logo-proyectoespana.webp" />
 
       {etiquetas.map((texto, i) => (
         <g
@@ -181,7 +160,7 @@ function EscenaIntroduccion({
           />
           <foreignObject x="70" y={PRIMERA + i * (ALTO + HUECO)} width="580" height={ALTO}>
             <div
-              className="flex h-full w-full items-center justify-center px-8 text-center font-mono text-[34px] uppercase leading-tight tracking-[2px] text-crema transition-colors group-hover:text-accent"
+              className="flex h-full w-full items-center justify-center px-8 text-center font-mono text-[34px] uppercase leading-tight tracking-[2px] text-enlace transition-colors group-hover:text-accent"
             >
               {texto}
             </div>
@@ -246,7 +225,7 @@ function Carrusel({
         >
           {t(`${base}.titulo`)}
         </h2>
-        <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+        <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
           {t(`${base}.texto`)}
         </p>
         {panel.correo && <BloqueCorreo />}
@@ -260,7 +239,7 @@ function Carrusel({
           <button
             type="button"
             onClick={alVolver}
-            className="cursor-pointer font-mono uppercase text-crema transition-colors hover:text-accent"
+            className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
             style={{ fontSize: '4cqw', letterSpacing: '0.1em', lineHeight: 1 }}
           >
             {`<< ${t('subs.volver')}`}
@@ -272,7 +251,7 @@ function Carrusel({
             type="button"
             onClick={() => ir(-1)}
             aria-label={t('paneles.anterior')}
-            className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
+            className="cursor-pointer font-mono text-enlace transition-colors hover:text-accent"
             style={{ fontSize: '6cqw', lineHeight: 1 }}
           >
             &lt;
@@ -299,7 +278,7 @@ function Carrusel({
             type="button"
             onClick={() => ir(1)}
             aria-label={t('paneles.siguiente')}
-            className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
+            className="cursor-pointer font-mono text-enlace transition-colors hover:text-accent"
             style={{ fontSize: '6cqw', lineHeight: 1 }}
           >
             &gt;
@@ -328,7 +307,7 @@ function BloqueCorreo() {
     <div className="flex flex-wrap items-center" style={{ gap: '4cqw', marginTop: '6cqw' }}>
       <a
         href={`mailto:${CORREO}`}
-        className="break-all font-mono text-crema underline decoration-line underline-offset-4 transition-colors hover:text-accent"
+        className="break-all font-mono text-enlace underline decoration-enlace/50 underline-offset-4 transition-colors hover:text-accent"
         style={{ fontSize: '5cqw', letterSpacing: '0.04em' }}
       >
         {CORREO}
@@ -336,7 +315,7 @@ function BloqueCorreo() {
       <button
         type="button"
         onClick={copiar}
-        className="cursor-pointer border border-line font-mono uppercase text-crema transition-colors hover:border-accent hover:text-accent"
+        className="cursor-pointer border border-enlace/50 font-mono uppercase text-enlace transition-colors hover:border-accent hover:text-accent"
         style={{ fontSize: '4cqw', letterSpacing: '0.1em', padding: '1.5cqw 3cqw' }}
       >
         {copiado ? t('contacto.copiado') : t('contacto.copiar')}
@@ -361,7 +340,7 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
         >
           {t('contacto.titulo')}
         </h2>
-        <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+        <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
           {t('contacto.texto')}
         </p>
         <BloqueCorreo />
@@ -369,7 +348,7 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
           <button
             type="button"
             onClick={alParticipar}
-            className="cursor-pointer font-mono uppercase text-crema transition-colors hover:text-accent"
+            className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
             style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
           >
             {`${t('subs.take-part')} >>`}
@@ -396,14 +375,14 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
         >
           {t('campanas.titulo')}
         </h2>
-        <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+        <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
           {t('campanas.texto')}
         </p>
         {alParticipar && (
           <button
             type="button"
             onClick={alParticipar}
-            className="cursor-pointer font-mono uppercase text-crema transition-colors hover:text-accent"
+            className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
             style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
           >
             {`${t('campanas.enlace')} >>`}
