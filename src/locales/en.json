@@ -1,16 +1,10 @@
 {
   "meta": {
-    "title": "App Place Catalog - Install one. Enjoy them all",
-    "description": "App Place Catalog brings several applications together inside a single Android app. Project in development."
+    "title": "ProyectoEspaña.dev | Equip the Sentinels",
+    "description": "A private initiative that funds the technical gear of those who document what happens in Spain on the ground and tell the world."
   },
   "hero": {
-    "eyebrow": "ap3c.app",
     "title": "ProyectoEspaña.dev",
-    "tagline": "The purpose of this website is to explain how you can enjoy our best applications (learning languages, meeting new people, etc.) by installing only our app from the Google Play Store.",
-    "status": "In development · Android",
-    "loading": "Loading video",
-    "welcome": "Welcome to the website of our Android app APP PLACE CATALOG:",
-    "accept": "GOT IT",
     "slogan": "Equip the Sentinels!\nSo the world knows!"
   },
   "language": {
@@ -21,26 +15,17 @@
   "footer": {
     "rights": "All rights reserved"
   },
-  "controls": {
-    "stop": "Stop",
-    "play": "Play",
-    "pause": "Pause",
-    "faster": "Faster",
-    "timeline": "Timeline",
-    "drag": "Drag to move the panel",
-    "fullscreen": "Fullscreen",
-    "exitFullscreen": "Exit fullscreen"
-  },
-  "videos": {
+  "secciones": {
     "v0": "Introduction",
     "v1": "Active campaigns"
   },
-  "apps": {
+  "subs": {
     "volver": "Back",
+    "what-it-is": "What ProyectoEspaña.dev is",
+    "sentinels": "Who the Sentinels are",
+    "take-part": "How to take part",
     "caballas": "Caballas"
   }
 }
-
-
 
 

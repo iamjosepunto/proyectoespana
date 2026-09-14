@@ -3,8 +3,14 @@
     "en": ["introduction", "active-campaigns"],
     "es": ["introduccion", "campanas-activas"]
   },
-  "apps": {
-    "en": ["caballas"],
-    "es": ["caballas"]
+  "subs": {
+    "introduction": {
+      "en": ["what-it-is", "sentinels", "take-part"],
+      "es": ["que-es", "centinelas", "participar"]
+    },
+    "active-campaigns": {
+      "en": ["caballas"],
+      "es": ["caballas"]
+    }
   }
 }

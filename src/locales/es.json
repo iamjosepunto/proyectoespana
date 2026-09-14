@@ -1,17 +1,11 @@
 {
   "meta": {
-    "title": "App Place Catalog - Instala una. Disfruta todas",
-    "description": "App Place Catalog reúne varias aplicaciones dentro de una sola app para Android. Proyecto en desarrollo."
+    "title": "ProyectoEspaña.dev | Equipa a los Centinelas",
+    "description": "Iniciativa privada que financia el equipo técnico de quienes documentan sobre el terreno lo que ocurre en España y lo cuentan al mundo."
   },
   "hero": {
-    "eyebrow": "ap3c.app",
     "title": "ProyectoEspaña.dev",
-    "tagline": "El objetivo de esta web es explicarte cómo puedes disfrutar de nuestras mejores aplicaciones (aprender idiomas, conocer nuevas personas, etc) instalándote únicamente nuestra app desde Google Play Store.",
-    "status": "En desarrollo · Android",
-    "loading": "Cargando vídeo",
-    "welcome": "Bienvenido a la web de nuestra app android APP PLACE CATALOG:",
-    "accept": "ENTENDIDO",
-    "slogan": "\u00a1Equipa a los Centinelas!\n\u00a1Que se sepa lo que pasa!"
+    "slogan": "¡Equipa a los Centinelas!\n¡Que se sepa lo que pasa!"
   },
   "language": {
     "label": "Idioma",
@@ -21,26 +15,17 @@
   "footer": {
     "rights": "Todos los derechos reservados"
   },
-  "controls": {
-    "stop": "Detener",
-    "play": "Reproducir",
-    "pause": "Pausar",
-    "faster": "Más rápido",
-    "timeline": "Línea de tiempo",
-    "drag": "Arrastra para mover el panel",
-    "fullscreen": "Pantalla completa",
-    "exitFullscreen": "Salir de pantalla completa"
-  },
-  "videos": {
+  "secciones": {
     "v0": "Introducción",
     "v1": "Campañas activas"
   },
-  "apps": {
+  "subs": {
     "volver": "Volver",
+    "what-it-is": "Qué es ProyectoEspaña.dev",
+    "sentinels": "Quiénes son los Centinelas",
+    "take-part": "Cómo participar",
     "caballas": "Caballas"
   }
 }
-
-
 
 

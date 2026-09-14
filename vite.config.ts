@@ -12,24 +12,30 @@ const IDIOMAS = ['en', 'es'] as const
 const OG_LOCALES = { en: 'en_US', es: 'es_ES' } as const
 
 type Idioma = (typeof IDIOMAS)[number]
+type TablaIdiomas = Record<Idioma, string[]>
 
 // Se lee el JSON en vez de importar src/rutas.ts: un import relativo sin
 // extension rompe tsc cuando moduleResolution es node16 o nodenext
 const RAIZ = process.cwd()
 const TABLA = JSON.parse(
   readFileSync(join(RAIZ, 'src', 'slugs.json'), 'utf8')
-) as { principal: Record<Idioma, string[]>; apps: Record<Idioma, string[]> }
+) as { principal: TablaIdiomas; subs: Record<string, TablaIdiomas> }
 const SLUGS = TABLA.principal
-const SLUGS_APPS = TABLA.apps
-const APPS = SLUGS.en.indexOf('active-campaigns')
+const SUBS = TABLA.subs
+
+// Las subrutas se indexan por el slug ingles de su seccion padre
+function subsDe(indice: number): TablaIdiomas | null {
+  const padre = SLUGS.en[indice]
+  return padre && SUBS[padre] ? SUBS[padre] : null
+}
 
 function leerDiccionario(idioma: Idioma) {
   const crudo = readFileSync(join(RAIZ, 'src', 'locales', `${idioma}.json`), 'utf8')
   return JSON.parse(crudo) as {
     meta: { title: string; description: string }
     hero: { title: string }
-    videos: Record<string, string>
-    apps: Record<string, string>
+    secciones: Record<string, string>
+    subs: Record<string, string>
   }
 }
 
@@ -44,14 +50,23 @@ function ponerMeta(html: string, atributo: string, clave: string, valor: string)
   return html.replace(patron, `<meta ${atributo}="${clave}" content="${escapar(valor)}" />`)
 }
 
+// Camino de una seccion o subseccion en un idioma dado
+function caminoDe(idioma: Idioma, indice: number, sub: number | null) {
+  const base = `/${idioma}/${SLUGS[idioma][indice]}`
+  if (sub === null) return base
+  const tabla = subsDe(indice)
+  return tabla ? `${base}/${tabla[idioma][sub]}` : base
+}
+
 function paginaDe(plantilla: string, idioma: Idioma, indice: number, sub: number | null = null) {
   const dic = leerDiccionario(idioma)
   const alterno: Idioma = idioma === 'es' ? 'en' : 'es'
-  const cola = sub === null ? '' : `/${SLUGS_APPS[idioma][sub]}`
-  const camino = `/${idioma}/${SLUGS[idioma][indice]}${cola}`
+  const tabla = subsDe(indice)
+  const camino = caminoDe(idioma, indice, sub)
   const url = `${DOMINIO}${camino}`
-  // La clave del diccionario es el propio slug, asi el orden lo manda slugs.json
-  const nombre = sub === null ? dic.videos[`v${indice}`] : dic.apps[SLUGS_APPS[idioma][sub]]
+  // La clave del diccionario es el slug ingles, asi el orden lo manda slugs.json
+  const nombre =
+    sub === null || !tabla ? dic.secciones[`v${indice}`] : dic.subs[tabla.en[sub]]
   const titulo = `${nombre} | ${dic.hero.title}`
   const descripcion = dic.meta.description
 
@@ -69,25 +84,35 @@ function paginaDe(plantilla: string, idioma: Idioma, indice: number, sub: number
   // hreflang: le dice al buscador que estas dos paginas son la misma en dos idiomas
   const alternas = [
     `<link rel="alternate" hreflang="${idioma}" href="${url}" />`,
-    `<link rel="alternate" hreflang="${alterno}" href="${DOMINIO}/${alterno}/${SLUGS[alterno][indice]}${sub === null ? '' : `/${SLUGS_APPS[alterno][sub]}`}" />`,
-    `<link rel="alternate" hreflang="x-default" href="${DOMINIO}/es/${SLUGS.es[indice]}${sub === null ? '' : `/${SLUGS_APPS.es[sub]}`}" />`
+    `<link rel="alternate" hreflang="${alterno}" href="${DOMINIO}${caminoDe(alterno, indice, sub)}" />`,
+    `<link rel="alternate" hreflang="x-default" href="${DOMINIO}${caminoDe('es', indice, sub)}" />`
   ].join('\n    ')
 
   return html.replace(/<\/head>/i, `  ${alternas}\n  </head>`)
 }
 
+// Recorre todas las combinaciones de seccion y subseccion que existen
+function todasLasRutas() {
+  const rutas: { idioma: Idioma; indice: number; sub: number | null }[] = []
+  for (const idioma of IDIOMAS) {
+    SLUGS[idioma].forEach((_, indice) => {
+      rutas.push({ idioma, indice, sub: null })
+      const tabla = subsDe(indice)
+      if (tabla) tabla[idioma].forEach((__, sub) => rutas.push({ idioma, indice, sub }))
+    })
+  }
+  return rutas
+}
+
 function sitemapDe() {
-  const urls = IDIOMAS.flatMap((idioma) => [
-    ...SLUGS[idioma].map((slug: string) => `  <url><loc>${DOMINIO}/${idioma}/${slug}</loc></url>`),
-    ...SLUGS_APPS[idioma].map(
-      (slug: string) => `  <url><loc>${DOMINIO}/${idioma}/${SLUGS[idioma][APPS]}/${slug}</loc></url>`
-    )
-  ])
+  const urls = todasLasRutas().map(
+    (r) => `  <url><loc>${DOMINIO}${caminoDe(r.idioma, r.indice, r.sub)}</loc></url>`
+  )
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`
 }
 
-// Genera una carpeta por seccion e idioma, cada una con su index.html propio.
-// Asi GitHub Pages responde 200 con el titulo correcto sin redirigir a nada
+// Genera una carpeta por ruta, cada una con su index.html propio. Asi GitHub
+// Pages responde 200 con el titulo correcto sin redirigir a nada
 function prerenderizar(): Plugin {
   return {
     name: 'proyectoespana-prerender',
@@ -98,21 +123,15 @@ function prerenderizar(): Plugin {
       const plantilla = readFileSync(raiz, 'utf8')
       let generadas = 0
 
-      for (const idioma of IDIOMAS) {
-        SLUGS[idioma].forEach((slug: string, indice: number) => {
-          const carpeta = join(salida, idioma, slug)
-          mkdirSync(carpeta, { recursive: true })
-          writeFileSync(join(carpeta, 'index.html'), paginaDe(plantilla, idioma, indice), 'utf8')
-          generadas++
-        })
-
-        // Las dos apps cuelgan de APPS: /idioma/apps/nombre
-        SLUGS_APPS[idioma].forEach((slug: string, sub: number) => {
-          const carpeta = join(salida, idioma, SLUGS[idioma][APPS], slug)
-          mkdirSync(carpeta, { recursive: true })
-          writeFileSync(join(carpeta, 'index.html'), paginaDe(plantilla, idioma, APPS, sub), 'utf8')
-          generadas++
-        })
+      for (const r of todasLasRutas()) {
+        const carpeta = join(salida, ...caminoDe(r.idioma, r.indice, r.sub).split('/').filter(Boolean))
+        mkdirSync(carpeta, { recursive: true })
+        writeFileSync(
+          join(carpeta, 'index.html'),
+          paginaDe(plantilla, r.idioma, r.indice, r.sub),
+          'utf8'
+        )
+        generadas++
       }
 
       // La raiz apunta a la primera seccion en espanol para no duplicar contenido
@@ -143,6 +162,3 @@ export default defineConfig({
     sourcemap: false
   }
 })
-
-
-

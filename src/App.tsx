@@ -4,28 +4,24 @@ import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import type { SupportedLanguage } from './i18n'
 import i18next from './i18n'
-import { APPS, SLUGS_APPS, leerRuta, rutaDe } from './rutas'
+import { SLUGS, leerRuta, rutaDe, subsDe } from './rutas'
 
-const PORTADAS: Record<SupportedLanguage, string[]> = {
-  en: ['/portada-construccion-en.webp', '/portada-construccion-en.webp'],
-  es: ['/portada-construccion-es.webp', '/portada-construccion-es.webp']
+// Todas las subrutas muestran la misma pantalla de obras hasta que tengan
+// contenido propio
+const PORTADA: Record<SupportedLanguage, string> = {
+  en: '/portada-construccion-en.webp',
+  es: '/portada-construccion-es.webp'
 }
 
-// Las dos apps llevan su portada por nombre y no por numero: asi no hay que
-// rehacerlas si algun dia cambia la posicion de APPS en la lista
-const PORTADAS_APPS: Record<SupportedLanguage, string[]> = {
-  en: ['/portada-construccion-en.webp'],
-  es: ['/portada-construccion-es.webp']
+function portadaDe(idioma: string) {
+  return PORTADA[(PORTADA[idioma as SupportedLanguage] ? idioma : 'en') as SupportedLanguage]
 }
 
-// La portada depende del idioma activo; un idioma inesperado cae al ingles
-function portadaDe(idioma: string, indice: number, sub: number | null) {
-  const lang = (PORTADAS[idioma as SupportedLanguage] ? idioma : 'en') as SupportedLanguage
-  return sub === null ? PORTADAS[lang][indice] : PORTADAS_APPS[lang][sub]
-}
+// Secciones cuyas subrutas se listan en la columna izquierda. Las demas llegan
+// a las suyas desde las zonas clicables de su escena
+const CON_SUBMENU = ['active-campaigns']
 
-// Aire entre el borde derecho de la imagen y lo que se apoya en ella: el pie y la
-// pildora de estado
+// Aire entre el borde derecho de la imagen y lo que se apoya en ella
 const SEPARACION = 5
 
 const OG_LOCALES: Record<string, string> = {
@@ -33,22 +29,32 @@ const OG_LOCALES: Record<string, string> = {
   en: 'en_US'
 }
 
+const DOMINIO = 'https://xn--proyectoespaa-tkb.dev'
+
 // La direccion manda sobre el idioma guardado: entrar en /es/... deja la web
 // en espanol. Se resuelve antes del primer render para que no haya parpadeo
 const RUTA_INICIAL = leerRuta(window.location.pathname)
 if (RUTA_INICIAL) void i18next.changeLanguage(RUTA_INICIAL.idioma)
 
-// APPS nunca se queda vacio: si no viene app en la direccion, se abre la primera
+function abreSubmenu(indice: number) {
+  return CON_SUBMENU.includes(SLUGS.en[indice]) && subsDe(indice) !== null
+}
+
+// Una seccion con submenu nunca se queda vacia: si no viene subruta, se abre la primera
 const SUB_INICIAL =
-  RUTA_INICIAL === null ? null : RUTA_INICIAL.indice === APPS ? (RUTA_INICIAL.sub ?? 0) : null
+  RUTA_INICIAL === null
+    ? null
+    : abreSubmenu(RUTA_INICIAL.indice)
+      ? (RUTA_INICIAL.sub ?? 0)
+      : RUTA_INICIAL.sub
 
 // Los dos menus comparten aspecto: se saca aqui para no repetir las clases
-function claseBoton(activo: boolean, creciendo = true) {
+function claseBoton(activo: boolean) {
   return [
     'flex cursor-pointer items-center rounded-sm px-1.5 py-1 text-left font-mono text-[0.66rem] uppercase leading-tight tracking-[0.08em]',
-    // En el submenu solo hay tres botones: conservan el alto de una fila de las
-    // doce y el resto de la columna queda vacio
-    creciendo ? 'flex-none basis-[calc(100%/12)]' : 'flex-none basis-[calc(100%/12)]',
+    // Cada entrada conserva el alto de una fila de doce y el resto de la
+    // columna queda vacio
+    'flex-none basis-[calc(100%/12)]',
     'transition-colors sm:px-3 sm:py-2 sm:text-[1.05rem] sm:tracking-[0.14em]',
     'border-y border-y-crema border-l-[3px]',
     activo
@@ -57,32 +63,109 @@ function claseBoton(activo: boolean, creciendo = true) {
   ].join(' ')
 }
 
-// Submenu de APPS: VOLVER cierra, las demas abren su tutorial. El orden y las
-// claves salen de slugs.json, asi que reordenarlas no obliga a tocar el codigo
-const APPS_MENU = [
-  { clave: 'apps.volver', sub: null as number | null },
-  ...SLUGS_APPS.en.map((slug, i) => ({ clave: `apps.${slug}`, sub: i as number | null }))
-]
-
 function setMeta(selector: string, content: string) {
   const tag = document.head.querySelector<HTMLMetaElement>(selector)
   if (tag) tag.content = content
 }
 
+// Escena de INTRODUCCION: todo dibujado en codigo salvo el logo, que se trae
+// del archivo. Las zonas de abajo llevan cada una a su propia subruta
+function EscenaIntroduccion({
+  titulo,
+  etiquetas,
+  alPulsar
+}: {
+  titulo: string
+  etiquetas: string[]
+  alPulsar: (sub: number) => void
+}) {
+  const ALTO = 150
+  const HUECO = 44
+  const PRIMERA = 1030
+
+  return (
+    <svg
+      viewBox="0 0 720 1606"
+      role="group"
+      aria-label={titulo}
+      className="h-full w-full border border-crema"
+    >
+      <rect width="720" height="1606" fill="var(--color-fondo)" />
+      <circle cx="360" cy="430" r="298" fill="none" stroke="var(--color-accent)" strokeWidth="9" />
+
+      <g fill="var(--color-line)">
+        <rect x="40" y="520" width="44" height="210" />
+        <rect x="98" y="452" width="36" height="278" />
+        <rect x="148" y="560" width="54" height="170" />
+        <rect x="524" y="482" width="40" height="248" />
+        <rect x="578" y="546" width="50" height="184" />
+        <rect x="642" y="440" width="32" height="290" />
+      </g>
+
+      <image x="180" y="248" width="360" height="328" href="/logo-proyectoespana.webp" />
+
+      <path
+        d="M0 748 Q90 712 180 748 T360 748 T540 748 T720 748 V820 H0 Z"
+        fill="var(--color-surface)"
+      />
+      <path
+        d="M0 796 Q90 760 180 796 T360 796 T540 796 T720 796"
+        fill="none"
+        stroke="var(--color-accent)"
+        strokeWidth="7"
+      />
+
+      {etiquetas.map((texto, i) => (
+        <g
+          key={texto}
+          role="button"
+          tabIndex={0}
+          aria-label={texto}
+          onClick={() => alPulsar(i)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              alPulsar(i)
+            }
+          }}
+          className="group cursor-pointer"
+        >
+          <rect
+            x="70"
+            y={PRIMERA + i * (ALTO + HUECO)}
+            width="580"
+            height={ALTO}
+            className="fill-transparent stroke-crema transition-colors group-hover:fill-crema/15"
+            strokeWidth="2"
+          />
+          <foreignObject x="70" y={PRIMERA + i * (ALTO + HUECO)} width="580" height={ALTO}>
+            <div
+              className="flex h-full w-full items-center justify-center px-8 text-center font-mono text-[34px] uppercase leading-tight tracking-[2px] text-crema transition-colors group-hover:text-accent"
+            >
+              {texto}
+            </div>
+          </foreignObject>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
 export default function App() {
   const { t, i18n } = useTranslation()
   const language = i18n.resolvedLanguage ?? 'en'
-  const imagen = useRef<HTMLImageElement>(null)
   const [intro, setIntro] = useState<'dentro' | 'saliendo' | 'fuera'>('dentro')
-  const [videoActivo, setVideoActivo] = useState(RUTA_INICIAL?.indice ?? 0)
-  const [appActiva, setAppActiva] = useState<number | null>(SUB_INICIAL)
-  // El submenu se abre al entrar en APPS y tambien al llegar por una ruta anidada
-  const [enApps, setEnApps] = useState(RUTA_INICIAL?.indice === APPS)
+  const [seccion, setSeccion] = useState(RUTA_INICIAL?.indice ?? 0)
+  const [subActiva, setSubActiva] = useState<number | null>(SUB_INICIAL)
+  // El submenu se abre al entrar en la seccion y tambien al llegar por una ruta anidada
+  const [enSubmenu, setEnSubmenu] = useState(
+    RUTA_INICIAL ? abreSubmenu(RUTA_INICIAL.indice) : false
+  )
   const [pantallaCompleta, setPantallaCompleta] = useState(false)
   const menu = useRef<HTMLElement>(null)
   const [borde, setBorde] = useState({ izq: 0, der: 0, ancho: 0 })
   const [esEscritorio, setEsEscritorio] = useState(false)
-  const zonaVideo = useRef<HTMLDivElement>(null)
+  const zonaImagen = useRef<HTMLDivElement>(null)
   const pie = useRef<HTMLElement>(null)
   const logoIntro = useRef<HTMLImageElement>(null)
   const logoCabecera = useRef<HTMLImageElement>(null)
@@ -116,7 +199,7 @@ export default function App() {
   // Si el navegador no admite pantalla completa sobre el contenedor (Safari en iPhone),
   // se expande por CSS y el resultado visual es el mismo
   const alternarPantallaCompleta = () => {
-    const zona = zonaVideo.current
+    const zona = zonaImagen.current
     if (!zona) return
     if (document.fullscreenElement) {
       void document.exitFullscreen()
@@ -141,7 +224,7 @@ export default function App() {
   // Los bordes del grupo salen de la imagen, que no se mueve de su sitio
   useEffect(() => {
     const n = menu.current
-    const z = zonaVideo.current
+    const z = zonaImagen.current
     if (!n || !z) return
     const medir = () => {
       const r = z.getBoundingClientRect()
@@ -168,30 +251,30 @@ export default function App() {
     return () => document.removeEventListener('fullscreenchange', alCambiar)
   }, [])
 
-  const mostrarVideo = (indice: number, sub: number | null = null) => {
-    setVideoActivo(indice)
-    setAppActiva(sub)
+  const mostrar = (indice: number, sub: number | null = null) => {
+    setSeccion(indice)
+    setSubActiva(sub)
   }
 
   // Pulsar en el menu anade una entrada al historial: el boton atras funciona
-  const elegirVideo = (indice: number) => {
-    // APPS abre el submenu y muestra ya la primera app, para no dejar el hueco vacio
-    const sub = indice === APPS ? 0 : null
-    mostrarVideo(indice, sub)
-    setEnApps(indice === APPS)
+  const elegirSeccion = (indice: number) => {
+    // Las secciones con submenu abren ya su primera subruta, para no dejar el hueco vacio
+    const sub = abreSubmenu(indice) ? 0 : null
+    mostrar(indice, sub)
+    setEnSubmenu(abreSubmenu(indice))
     window.history.pushState(null, '', rutaDe(language, indice, sub))
   }
 
-  const elegirApp = (sub: number) => {
-    mostrarVideo(APPS, sub)
-    window.history.pushState(null, '', rutaDe(language, APPS, sub))
+  const elegirSub = (sub: number) => {
+    mostrar(seccion, sub)
+    window.history.pushState(null, '', rutaDe(language, seccion, sub))
   }
 
-  // VOLVER cierra el submenu y baja al primer punto de la lista: APPS es solo
-  // un enlace, no debe quedarse marcado ni dejar el hueco de la imagen vacio
-  const salirDeApps = () => {
-    setEnApps(false)
-    mostrarVideo(0)
+  // VOLVER cierra el submenu y baja al primer punto de la lista: la seccion con
+  // submenu es solo un enlace, no debe quedarse marcada ni dejar el hueco vacio
+  const salirDelSubmenu = () => {
+    setEnSubmenu(false)
+    mostrar(0)
     window.history.pushState(null, '', rutaDe(language, 0))
   }
 
@@ -200,30 +283,45 @@ export default function App() {
     const alNavegar = () => {
       const ruta = leerRuta(window.location.pathname)
       if (!ruta) return
-      mostrarVideo(ruta.indice, ruta.indice === APPS ? (ruta.sub ?? 0) : ruta.sub)
-      setEnApps(ruta.indice === APPS)
+      mostrar(ruta.indice, abreSubmenu(ruta.indice) ? (ruta.sub ?? 0) : ruta.sub)
+      setEnSubmenu(abreSubmenu(ruta.indice))
       if (ruta.idioma !== language) void i18n.changeLanguage(ruta.idioma)
     }
     window.addEventListener('popstate', alNavegar)
     return () => window.removeEventListener('popstate', alNavegar)
   })
 
-  // APPS es solo un enlace al submenu: no tiene portada propia
-  const sinMedia = videoActivo === APPS && appActiva === null
+  const tabla = subsDe(seccion)
+  const lang = (language === 'es' ? 'es' : 'en') as SupportedLanguage
+  // Sin subruta elegida: las secciones con escena la muestran, las de submenu no
+  // tienen nada propio que ensenar
+  const conEscena = subActiva === null && tabla !== null && !abreSubmenu(seccion)
+  const sinMedia = subActiva === null && tabla !== null && abreSubmenu(seccion)
+
+  const nombreActual =
+    subActiva === null || !tabla
+      ? t(`secciones.v${seccion}`)
+      : t(`subs.${tabla.en[subActiva]}`)
+
+  // Entradas del submenu de la seccion activa, con VOLVER delante
+  const menuSubs = tabla
+    ? [
+        { clave: 'subs.volver', sub: null as number | null },
+        ...tabla.en.map((slug, i) => ({ clave: `subs.${slug}`, sub: i as number | null }))
+      ]
+    : []
 
   // El idioma y la seccion activa deben reflejarse en el documento y en la
   // direccion. Tambien cubre la entrada por la raiz, que no tiene camino valido
   useEffect(() => {
-    const camino = rutaDe(language, videoActivo, appActiva)
+    const camino = rutaDe(language, seccion, subActiva)
     if (window.location.pathname !== camino) {
       window.history.replaceState(null, '', camino)
     }
 
-    const nombre =
-      appActiva === null ? t(`videos.v${videoActivo}`) : t(`apps.${SLUGS_APPS.en[appActiva]}`)
-    const title = `${nombre} | ${t('hero.title')}`
+    const title = `${nombreActual} | ${t('hero.title')}`
     const description = t('meta.description')
-    const url = `https://ap3c.app${camino}`
+    const url = `${DOMINIO}${camino}`
 
     document.documentElement.lang = language
     document.title = title
@@ -235,7 +333,7 @@ export default function App() {
 
     const canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
     if (canonical) canonical.href = url
-  }, [language, videoActivo, appActiva, t])
+  }, [language, seccion, subActiva, nombreActual, t])
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -246,23 +344,23 @@ export default function App() {
 
       <nav
         ref={menu}
-        aria-label="Videos"
+        aria-label="Secciones"
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
-          'absolute bottom-[44px] left-0 top-[66px] z-10 flex w-[70px] flex-col sm:bottom-[60px] sm:top-[306px] sm:w-[279px] sm:pl-3 sm:pr-1',
+          'absolute bottom-[44px] left-0 top-[66px] z-10 flex w-[70px] flex-col sm:bottom-[60px] sm:top-[329px] sm:w-[279px] sm:pl-3 sm:pr-1',
           pantallaCompleta ? 'hidden' : ''
         ].join(' ')}
       >
-        {enApps
-          ? APPS_MENU.map((entrada, i) => {
-              const activo = entrada.sub !== null && entrada.sub === appActiva
+        {enSubmenu
+          ? menuSubs.map((entrada, i) => {
+              const activo = entrada.sub !== null && entrada.sub === subActiva
               return (
                 <button
                   key={entrada.clave}
                   type="button"
-                  onClick={() => (entrada.sub === null ? salirDeApps() : elegirApp(entrada.sub))}
+                  onClick={() => (entrada.sub === null ? salirDelSubmenu() : elegirSub(entrada.sub))}
                   aria-current={activo ? 'true' : undefined}
-                  className={claseBoton(activo, false)}
+                  className={claseBoton(activo)}
                 >
                   <span className={i === 0 ? undefined : 'min-w-0 hyphens-auto break-words'}>
                     {entrada.sub === null ? `<< ${t(entrada.clave)}` : t(entrada.clave)}
@@ -270,46 +368,46 @@ export default function App() {
                 </button>
               )
             })
-          : PORTADAS.en.map((_, i) => (
+          : SLUGS.en.map((_, i) => (
               <button
                 key={i}
                 type="button"
-                onClick={() => elegirVideo(i)}
-                aria-current={i === videoActivo ? 'true' : undefined}
-                className={claseBoton(i === videoActivo)}
+                onClick={() => elegirSeccion(i)}
+                aria-current={i === seccion ? 'true' : undefined}
+                className={claseBoton(i === seccion)}
               >
-                {/* Solo el primer punto parte la palabra: es la unica que no cabe entera */}
-                <span
-                  className={
-                    i === 0
-                      ? 'min-w-0 hyphens-auto break-words'
-                      : undefined
-                  }
-                >
-                  {i === APPS ? `${t('videos.v' + i)} >>` : t(`videos.v${i}`)}
+                <span className="min-w-0 hyphens-auto break-words">
+                  {abreSubmenu(i) ? `${t(`secciones.v${i}`)} >>` : t(`secciones.v${i}`)}
                 </span>
               </button>
             ))}
       </nav>
 
       <div
-        ref={zonaVideo}
+        ref={zonaImagen}
         className={
           pantallaCompleta
             ? 'fixed inset-0 z-40 bg-fondo'
             : 'absolute bottom-[48px] left-[70px] right-0 top-[58px] m-auto aspect-[720/1606] h-[min(calc(100dvh-106px),calc((100vw-70px)*2.2306))] sm:bottom-0 sm:left-[220px] sm:top-0 sm:mx-auto sm:my-0 sm:h-dvh'
         }
       >
-        {!sinMedia && (
-        <img
-          ref={imagen}
-          src={portadaDe(language, videoActivo, appActiva)}
-          alt={appActiva === null ? t(`videos.v${videoActivo}`) : t(`apps.${SLUGS_APPS.en[appActiva]}`)}
-          width={720}
-          height={1606}
-          onDoubleClick={alternarPantallaCompleta}
-          className="h-full w-full border border-crema object-contain"
-        />
+        {conEscena && tabla && (
+          <EscenaIntroduccion
+            titulo={t(`secciones.v${seccion}`)}
+            etiquetas={tabla.en.map((slug) => t(`subs.${slug}`))}
+            alPulsar={elegirSub}
+          />
+        )}
+
+        {!conEscena && !sinMedia && (
+          <img
+            src={portadaDe(lang)}
+            alt={nombreActual}
+            width={720}
+            height={1606}
+            onDoubleClick={alternarPantallaCompleta}
+            className="h-full w-full border border-crema object-contain"
+          />
         )}
       </div>
 
@@ -317,9 +415,9 @@ export default function App() {
         ref={logoCabecera}
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         src="/logo-proyectoespana.webp"
-        alt="App Place Catalog"
-        width={600}
-        height={547}
+        alt={t('hero.title')}
+        width={800}
+        height={800}
         className={[
           'absolute left-0 top-0 z-10 w-[68px] sm:ml-[14px] sm:w-[263px]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
@@ -331,7 +429,7 @@ export default function App() {
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
           'absolute left-[72px] right-[110px] top-[20px] z-10 whitespace-pre text-center font-mono text-[0.78rem] uppercase leading-snug tracking-[0.06em] text-crema',
-          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[248px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
+          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[271px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       >
@@ -355,8 +453,8 @@ export default function App() {
               ref={logoIntro}
               src="/logo-proyectoespana.webp"
               alt=""
-              width={600}
-              height={547}
+              width={800}
+              height={800}
               style={intro === 'saliendo' ? { transform: viaje } : undefined}
               className={[
                 'w-full max-w-none sm:w-[480px]',
@@ -396,40 +494,10 @@ export default function App() {
           {`©${new Date().getFullYear()}`}
           <span className="ml-1.5 text-[0.6rem] sm:text-xs">{t('footer.rights')}</span></span><span className="order-1 flex items-center gap-1.5 whitespace-nowrap">By<a href="https://iamjosepunto.github.io" target="_blank" rel="noopener noreferrer" className="text-crema/80 transition-colors hover:text-crema">IamJosePunto.GitHub.io</a>
         </span>
-        <span className="hidden">
-          {t('footer.rights')}
-        </span>
       </footer>
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
