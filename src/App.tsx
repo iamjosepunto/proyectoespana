@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import type { SupportedLanguage } from './i18n'
 import i18next from './i18n'
-import { APPS, SLUGS_APPS, esIdiomaValido, leerRuta, rutaDe } from './rutas'
+import { APPS, SLUGS_APPS, leerRuta, rutaDe } from './rutas'
 
 const PORTADAS: Record<SupportedLanguage, string[]> = {
-  // El numero del archivo es el del tutorial, que empieza en 1, no en 0
   en: ['/portada-construccion-en.webp', '/portada-construccion-en.webp'],
   es: ['/portada-construccion-es.webp', '/portada-construccion-es.webp']
 }
@@ -25,33 +24,9 @@ function portadaDe(idioma: string, indice: number, sub: number | null) {
   return sub === null ? PORTADAS[lang][indice] : PORTADAS_APPS[lang][sub]
 }
 
-// Salvo EMPEZAR, todos los puntos comparten el mismo video de relleno
-const EN_OBRAS = '/video-construccion.mp4'
-
-// Aire entre el borde derecho del video y lo que se apoya en el: el pie y la
+// Aire entre el borde derecho de la imagen y lo que se apoya en ella: el pie y la
 // pildora de estado
 const SEPARACION = 5
-
-// Tutoriales ya grabados, por numero de tutorial. Cada uno con su archivo por
-// idioma; los que faltan usan el video de construccion. Anadir uno nuevo es
-// anadir una linea aqui
-const GRABADOS: Record<number, Record<SupportedLanguage, string>> = {
-  1: {
-    en: '/Tutorial_1_Requisitos_EN_reducido.mp4',
-    es: '/Tutorial_1_Requisitos_ES_reducido.mp4'
-  },
-  // El 2, Empezar, sigue con el video provisional, que no tiene version por idioma
-  2: { en: '/Prueba.mp4', es: '/Prueba.mp4' }
-}
-
-// El video depende del idioma y del punto activo; dentro de APPS siempre es el
-// de construccion, porque las dos apps aun no tienen tutorial propio
-function videoDe(idioma: string, indice: number, sub: number | null) {
-  if (sub !== null) return EN_OBRAS
-  const grabado = GRABADOS[indice + 1]
-  if (!grabado) return EN_OBRAS
-  return grabado[esIdiomaValido(idioma) ? idioma : 'en']
-}
 
 const OG_LOCALES: Record<string, string> = {
   es: 'es_ES',
@@ -97,7 +72,7 @@ function setMeta(selector: string, content: string) {
 export default function App() {
   const { t, i18n } = useTranslation()
   const language = i18n.resolvedLanguage ?? 'en'
-  const video = useRef<HTMLVideoElement>(null)
+  const imagen = useRef<HTMLImageElement>(null)
   const [intro, setIntro] = useState<'dentro' | 'saliendo' | 'fuera'>('dentro')
   const [videoActivo, setVideoActivo] = useState(RUTA_INICIAL?.indice ?? 0)
   const [appActiva, setAppActiva] = useState<number | null>(SUB_INICIAL)
@@ -138,13 +113,6 @@ export default function App() {
     )
   }, [intro])
 
-  // Se recarga cada vez que cambia el archivo, sea por cambio de punto o de
-  // idioma. Los puntos en obras comparten archivo, asi que sin load() el <video>
-  // conservaria el fotograma ya decodificado y no se veria la portada nueva
-  useEffect(() => {
-    video.current?.load()
-  }, [videoActivo, appActiva, language])
-
   // Si el navegador no admite pantalla completa sobre el contenedor (Safari en iPhone),
   // se expande por CSS y el resultado visual es el mismo
   const alternarPantallaCompleta = () => {
@@ -161,7 +129,7 @@ export default function App() {
     setPantallaCompleta((v) => !v)
   }
 
-  // En escritorio todo se agrupa en un escenario del ancho de menu mas video
+  // En escritorio todo se agrupa en un escenario del ancho de menu mas imagen
   useEffect(() => {
     const consulta = window.matchMedia('(min-width: 640px)')
     const mirar = () => setEsEscritorio(consulta.matches)
@@ -170,7 +138,7 @@ export default function App() {
     return () => consulta.removeEventListener('change', mirar)
   }, [])
 
-  // Los bordes del grupo salen del video, que no se mueve de su sitio
+  // Los bordes del grupo salen de la imagen, que no se mueve de su sitio
   useEffect(() => {
     const n = menu.current
     const z = zonaVideo.current
@@ -220,7 +188,7 @@ export default function App() {
   }
 
   // VOLVER cierra el submenu y baja al primer punto de la lista: APPS es solo
-  // un enlace, no debe quedarse marcado ni dejar el hueco del video vacio
+  // un enlace, no debe quedarse marcado ni dejar el hueco de la imagen vacio
   const salirDeApps = () => {
     setEnApps(false)
     mostrarVideo(0)
@@ -240,10 +208,10 @@ export default function App() {
     return () => window.removeEventListener('popstate', alNavegar)
   })
 
-  // APPS es solo un enlace al submenu: no tiene portada ni video propios
+  // APPS es solo un enlace al submenu: no tiene portada propia
   const sinMedia = videoActivo === APPS && appActiva === null
 
-  // El idioma y el video activos deben reflejarse en el documento y en la
+  // El idioma y la seccion activa deben reflejarse en el documento y en la
   // direccion. Tambien cubre la entrada por la raiz, que no tiene camino valido
   useEffect(() => {
     const camino = rutaDe(language, videoActivo, appActiva)
@@ -253,7 +221,7 @@ export default function App() {
 
     const nombre =
       appActiva === null ? t(`videos.v${videoActivo}`) : t(`apps.${SLUGS_APPS.en[appActiva]}`)
-    const title = `${nombre} \u2014 ${t('hero.title')}`
+    const title = `${nombre} | ${t('hero.title')}`
     const description = t('meta.description')
     const url = `https://ap3c.app${camino}`
 
@@ -281,7 +249,7 @@ export default function App() {
         aria-label="Videos"
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
-          'absolute bottom-[44px] left-0 top-[66px] z-10 flex w-[70px] flex-col sm:bottom-[60px] sm:top-[190px] sm:w-fit sm:pl-3 sm:pr-1',
+          'absolute bottom-[44px] left-0 top-[66px] z-10 flex w-[70px] flex-col sm:bottom-[60px] sm:top-[306px] sm:w-[279px] sm:pl-3 sm:pr-1',
           pantallaCompleta ? 'hidden' : ''
         ].join(' ')}
       >
@@ -333,17 +301,13 @@ export default function App() {
         }
       >
         {!sinMedia && (
-        <video
-          ref={video}
-          src={videoDe(language, videoActivo, appActiva)}
-          poster={portadaDe(language, videoActivo, appActiva)}
-          muted
-          playsInline
-          preload="metadata"
+        <img
+          ref={imagen}
+          src={portadaDe(language, videoActivo, appActiva)}
+          alt={appActiva === null ? t(`videos.v${videoActivo}`) : t(`apps.${SLUGS_APPS.en[appActiva]}`)}
+          width={720}
+          height={1606}
           onDoubleClick={alternarPantallaCompleta}
-          onEnded={() => {
-            if (video.current) video.current.currentTime = 0
-          }}
           className="h-full w-full border border-crema object-contain"
         />
         )}
@@ -357,7 +321,7 @@ export default function App() {
         width={600}
         height={547}
         className={[
-          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[63px] sm:w-36',
+          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[14px] sm:w-[263px]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       />
@@ -367,7 +331,7 @@ export default function App() {
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
           'absolute left-[72px] right-[110px] top-[20px] z-10 whitespace-pre text-center font-mono text-[0.78rem] uppercase leading-snug tracking-[0.06em] text-crema',
-          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[136px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
+          'sm:left-0 sm:ml-[14px] sm:right-auto sm:top-[248px] sm:w-[263px] sm:text-[1.09rem] sm:tracking-[0em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       >
@@ -395,7 +359,7 @@ export default function App() {
               height={547}
               style={intro === 'saliendo' ? { transform: viaje } : undefined}
               className={[
-                'w-full max-w-none sm:w-[23rem]',
+                'w-full max-w-none sm:w-[480px]',
                 intro === 'dentro'
                   ? 'intro-logo origin-center'
                   : 'origin-top-left transition-transform duration-[900ms] ease-[cubic-bezier(0.65,0,0.35,1)]'
@@ -439,6 +403,11 @@ export default function App() {
     </div>
   )
 }
+
+
+
+
+
 
 
 

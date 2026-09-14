@@ -52,7 +52,7 @@ function paginaDe(plantilla: string, idioma: Idioma, indice: number, sub: number
   const url = `${DOMINIO}${camino}`
   // La clave del diccionario es el propio slug, asi el orden lo manda slugs.json
   const nombre = sub === null ? dic.videos[`v${indice}`] : dic.apps[SLUGS_APPS[idioma][sub]]
-  const titulo = `${nombre} \u2014 ${dic.hero.title}`
+  const titulo = `${nombre} | ${dic.hero.title}`
   const descripcion = dic.meta.description
 
   let html = plantilla
@@ -143,5 +143,6 @@ export default defineConfig({
     sourcemap: false
   }
 })
+
 
 
