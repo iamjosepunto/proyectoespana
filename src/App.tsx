@@ -19,7 +19,7 @@ function portadaDe(idioma: string) {
 
 // Paneles de las subrutas que se leen como carrusel. La imagen es null
 // mientras el archivo no exista: asi no se piden recursos que dan 404
-type Panel = { clave: string; imagen: string | null }
+type Panel = { clave: string; imagen: string | null; correo?: boolean }
 
 const PANELES: Record<string, Panel[]> = {
   'what-it-is': [
@@ -36,10 +36,10 @@ const PANELES: Record<string, Panel[]> = {
     { clave: 'p4', imagen: '/credibilidad.webp' }
   ],
   'take-part': [
-    { clave: 'p1', imagen: null },
-    { clave: 'p2', imagen: null },
-    { clave: 'p3', imagen: null },
-    { clave: 'p4', imagen: null }
+    { clave: 'p1', imagen: '/candidatura.webp' },
+    { clave: 'p2', imagen: '/revision.webp' },
+    { clave: 'p3', imagen: '/campana.webp' },
+    { clave: 'p4', imagen: '/correo.webp', correo: true }
   ]
 }
 
@@ -56,6 +56,10 @@ const OG_LOCALES: Record<string, string> = {
 }
 
 const DOMINIO = 'https://xn--proyectoespaa-tkb.dev'
+
+// Unica direccion de contacto del proyecto: vive aqui y no en los diccionarios
+// porque es la misma en los dos idiomas y la usa el enlace mailto
+const CORREO = 'iamjosepunto@gmail.com'
 
 // La direccion manda sobre el idioma guardado: entrar en /es/... deja la web
 // en espanol. Se resuelve antes del primer render para que no haya parpadeo
@@ -245,6 +249,7 @@ function Carrusel({
         <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
           {t(`${base}.texto`)}
         </p>
+        {panel.correo && <BloqueCorreo />}
       </div>
 
       <div
@@ -300,6 +305,76 @@ function Carrusel({
             &gt;
           </button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// Direccion de contacto con boton de copiar. La usan la pantalla de contacto y
+// el panel que explica donde se envia la candidatura
+function BloqueCorreo() {
+  const { t } = useTranslation()
+  const [copiado, setCopiado] = useState(false)
+
+  const copiar = () => {
+    if (!navigator.clipboard) return
+    void navigator.clipboard.writeText(CORREO).then(() => {
+      setCopiado(true)
+      setTimeout(() => setCopiado(false), 2000)
+    })
+  }
+
+  return (
+    <div className="flex flex-wrap items-center" style={{ gap: '4cqw', marginTop: '6cqw' }}>
+      <a
+        href={`mailto:${CORREO}`}
+        className="break-all font-mono text-crema underline decoration-line underline-offset-4 transition-colors hover:text-accent"
+        style={{ fontSize: '5cqw', letterSpacing: '0.04em' }}
+      >
+        {CORREO}
+      </a>
+      <button
+        type="button"
+        onClick={copiar}
+        className="cursor-pointer border border-line font-mono uppercase text-crema transition-colors hover:border-accent hover:text-accent"
+        style={{ fontSize: '4cqw', letterSpacing: '0.1em', padding: '1.5cqw 3cqw' }}
+      >
+        {copiado ? t('contacto.copiado') : t('contacto.copiar')}
+      </button>
+    </div>
+  )
+}
+
+// Pantalla de la seccion de contacto: texto y la direccion como enlace
+function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null }) {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      className="flex h-full w-full flex-col justify-center border border-crema bg-fondo"
+      style={{ containerType: 'size' }}
+    >
+      <div style={{ padding: '8cqw' }}>
+        <h2
+          className="font-mono uppercase text-accent"
+          style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
+        >
+          {t('contacto.titulo')}
+        </h2>
+        <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+          {t('contacto.texto')}
+        </p>
+        <BloqueCorreo />
+        {alParticipar && (
+          <button
+            type="button"
+            onClick={alParticipar}
+            className="cursor-pointer font-mono uppercase text-crema transition-colors hover:text-accent"
+            style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
+          >
+            {`${t('subs.take-part')} >>`}
+          </button>
+        )}
       </div>
     </div>
   )
@@ -504,6 +579,8 @@ export default function App() {
   const rutaSub = subActiva !== null && tabla ? tabla.en[subActiva] : null
   // Campanas activas no tiene subrutas mientras no haya ninguna campana abierta
   const enCampanas = SLUGS.en[seccion] === 'active-campaigns' && subActiva === null
+  // Contacto tampoco tiene subrutas: es una sola pantalla
+  const enContacto = SLUGS.en[seccion] === 'contact' && subActiva === null
 
   const nombreActual =
     subActiva === null || !tabla
@@ -610,6 +687,10 @@ export default function App() {
           <PantallaCampanas alParticipar={PARTICIPAR ? irAParticipar : null} />
         )}
 
+        {!conEscena && !sinMedia && enContacto && (
+          <PantallaContacto alParticipar={PARTICIPAR ? irAParticipar : null} />
+        )}
+
         {!conEscena && !sinMedia && rutaSub && PANELES[rutaSub] && (
           <Carrusel
             key={rutaSub}
@@ -619,7 +700,7 @@ export default function App() {
           />
         )}
 
-        {!conEscena && !sinMedia && !enCampanas && !(rutaSub && PANELES[rutaSub]) && (
+        {!conEscena && !sinMedia && !enCampanas && !enContacto && !(rutaSub && PANELES[rutaSub]) && (
           <img
             src={portadaDe(lang)}
             alt={nombreActual}

@@ -1,7 +1,7 @@
 {
   "principal": {
-    "en": ["introduction", "active-campaigns"],
-    "es": ["introduccion", "campanas-activas"]
+    "en": ["introduction", "active-campaigns", "contact"],
+    "es": ["introduccion", "campanas-activas", "contacto"]
   },
   "subs": {
     "introduction": {

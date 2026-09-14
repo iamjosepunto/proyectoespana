@@ -17,13 +17,20 @@
   },
   "secciones": {
     "v0": "Introducción",
-    "v1": "Campañas activas"
+    "v1": "Campañas activas",
+    "v2": "Contacto"
   },
   "subs": {
     "volver": "Volver",
     "what-it-is": "Qué es ProyectoEspaña.dev",
     "sentinels": "Quiénes son los Centinelas",
     "take-part": "Cómo participar"
+  },
+  "contacto": {
+    "titulo": "Contacto",
+    "texto": "Una sola dirección para todo: candidaturas a Centinela, ofrecimientos de equipo o de ayuda técnica, y cualquier duda sobre cómo funciona el proyecto. Se contesta desde ahí mismo.",
+    "copiar": "Copiar email de contacto",
+    "copiado": "Email copiado"
   },
   "campanas": {
     "titulo": "Todavía no hay campañas activas",
@@ -88,7 +95,7 @@
       },
       "p4": {
         "titulo": "Dónde se envía",
-        "texto": "iamjosepunto@gmail.com, con asunto «Candidatura Centinela». Una sola dirección, sin formularios ni intermediarios."
+        "texto": "A esta dirección, con el asunto «Candidatura Centinela». Sin formularios ni intermediarios."
       }
     }
   }

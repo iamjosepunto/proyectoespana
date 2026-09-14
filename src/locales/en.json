@@ -17,13 +17,20 @@
   },
   "secciones": {
     "v0": "Introduction",
-    "v1": "Active campaigns"
+    "v1": "Active campaigns",
+    "v2": "Contact"
   },
   "subs": {
     "volver": "Back",
     "what-it-is": "What ProyectoEspaña.dev is",
     "sentinels": "Who the Sentinels are",
     "take-part": "How to take part"
+  },
+  "contacto": {
+    "titulo": "Contact",
+    "texto": "One single address for everything: Sentinel applications, offers of gear or technical help, and any question about how the project works. It is answered from there.",
+    "copiar": "Copy contact email",
+    "copiado": "Email copied"
   },
   "campanas": {
     "titulo": "There are no active campaigns yet",
@@ -88,7 +95,7 @@
       },
       "p4": {
         "titulo": "Where to send it",
-        "texto": "iamjosepunto@gmail.com, with the subject “Sentinel application”. One single address, no forms and no middlemen."
+        "texto": "To this address, with the subject “Sentinel application”. No forms and no middlemen."
       }
     }
   }
