@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "ProyectoEspaña.dev | Equip the Sentinels",
-    "description": "A private initiative that funds the technical gear of those who document what happens in Spain on the ground and tell the world."
+    "title": "App Place Catalog - Install one. Enjoy them all",
+    "description": "App Place Catalog brings several applications together inside a single Android app. Project in development."
   },
   "hero": {
     "title": "ProyectoEspaña.dev",
@@ -21,11 +21,35 @@
   },
   "subs": {
     "volver": "Back",
-    "what-it-is": "What ProyectoEspaña.dev is",
+    "what-it-is": "What ProyectoEspaña is",
     "sentinels": "Who the Sentinels are",
     "take-part": "How to take part",
     "caballas": "Caballas"
+  },
+  "paneles": {
+    "anterior": "Previous",
+    "siguiente": "Next",
+    "what-it-is": {
+      "p1": {
+        "titulo": "What it is",
+        "texto": "ProyectoEspaña.dev is a private initiative that equips the people who document what happens on Spanish soil and tell the world about it."
+      },
+      "p2": {
+        "titulo": "Why it matters",
+        "texto": "The Ceuta invasion, the Valencia flash floods, storm Filomena, the La Palma volcano. Events the world needs to see in detail and as they happen, not three days later and summarised."
+      },
+      "p3": {
+        "titulo": "What gets in the way",
+        "texto": "You have to move fast, and you cannot broadcast with a phone in your hand. At night you see nothing without a thermal camera. What you need to show is far away, or moving, or you need to be able to leave quickly. Sometimes the place is not safe and there is no vehicle to leave in."
+      },
+      "p4": {
+        "titulo": "What is needed",
+        "texto": "Gear that frees your hands and survives the terrain, training to use it well, and a technical organisation that coordinates broadcasting, storage and distribution."
+      },
+      "p5": {
+        "titulo": "How it is funded",
+        "texto": "Through crowdfunding campaigns. Each one states what gear it needs, for whom and what for."
+      }
+    }
   }
 }
-
-

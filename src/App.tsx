@@ -17,6 +17,20 @@ function portadaDe(idioma: string) {
   return PORTADA[(PORTADA[idioma as SupportedLanguage] ? idioma : 'en') as SupportedLanguage]
 }
 
+// Paneles de las subrutas que se leen como carrusel. La imagen es null
+// mientras el archivo no exista: asi no se piden recursos que dan 404
+type Panel = { clave: string; imagen: string | null }
+
+const PANELES: Record<string, Panel[]> = {
+  'what-it-is': [
+    { clave: 'p1', imagen: null },
+    { clave: 'p2', imagen: null },
+    { clave: 'p3', imagen: null },
+    { clave: 'p4', imagen: null },
+    { clave: 'p5', imagen: null }
+  ]
+}
+
 // Secciones cuyas subrutas se listan en la columna izquierda. Las demas llegan
 // a las suyas desde las zonas clicables de su escena
 const CON_SUBMENU = ['active-campaigns']
@@ -148,6 +162,102 @@ function EscenaIntroduccion({
         </g>
       ))}
     </svg>
+  )
+}
+
+// Carrusel de una subruta: una imagen, su texto y navegacion ciclica. Las
+// medidas van en cqw para que todo escale con el ancho de la caja
+function Carrusel({ ruta, paneles }: { ruta: string; paneles: Panel[] }) {
+  const { t } = useTranslation()
+  const [i, setI] = useState(0)
+  const total = paneles.length
+  const ir = (paso: number) => setI((n) => (n + paso + total) % total)
+  const panel = paneles[i]
+  const base = `paneles.${ruta}.${panel.clave}`
+
+  return (
+    <div
+      className="relative flex h-full w-full flex-col border border-crema bg-fondo"
+      style={{ containerType: 'size' }}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowLeft') ir(-1)
+        if (e.key === 'ArrowRight') ir(1)
+      }}
+      tabIndex={0}
+    >
+      <div style={{ padding: '5cqw 5cqw 0' }}>
+        {panel.imagen ? (
+          <img
+            src={panel.imagen}
+            alt={t(`${base}.titulo`)}
+            width={1200}
+            height={1200}
+            className="aspect-square w-full object-cover"
+          />
+        ) : (
+          <div
+            className="flex aspect-square w-full items-center justify-center border border-dashed border-line text-muted"
+            style={{ fontSize: '3.4cqw', letterSpacing: '0.1em' }}
+          >
+            {panel.clave.toUpperCase()}
+          </div>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-hidden" style={{ padding: '5cqw' }}>
+        <h2
+          className="font-mono uppercase text-accent"
+          style={{ fontSize: '4.6cqw', letterSpacing: '0.08em', marginBottom: '2.5cqw' }}
+        >
+          {t(`${base}.titulo`)}
+        </h2>
+        <p className="text-crema/85" style={{ fontSize: '4cqw', lineHeight: 1.65 }}>
+          {t(`${base}.texto`)}
+        </p>
+      </div>
+
+      <div
+        className="flex items-center justify-between border-t border-line/60"
+        style={{ padding: '3cqw 5cqw' }}
+      >
+        <button
+          type="button"
+          onClick={() => ir(-1)}
+          aria-label={t('paneles.anterior')}
+          className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
+          style={{ fontSize: '6cqw', lineHeight: 1 }}
+        >
+          &lt;
+        </button>
+
+        <div className="flex" style={{ gap: '2.2cqw' }}>
+          {paneles.map((p, n) => (
+            <button
+              key={p.clave}
+              type="button"
+              onClick={() => setI(n)}
+              aria-label={`${n + 1}`}
+              aria-current={n === i ? 'true' : undefined}
+              className={[
+                'cursor-pointer rounded-full transition-colors',
+                n === i ? 'bg-accent' : 'bg-line hover:bg-crema/60'
+              ].join(' ')}
+              style={{ width: '2.4cqw', height: '2.4cqw' }}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => ir(1)}
+          aria-label={t('paneles.siguiente')}
+          className="cursor-pointer font-mono text-crema transition-colors hover:text-accent"
+          style={{ fontSize: '6cqw', lineHeight: 1 }}
+        >
+          &gt;
+        </button>
+      </div>
+    </div>
   )
 }
 
@@ -298,6 +408,8 @@ export default function App() {
   const conEscena = subActiva === null && tabla !== null && !abreSubmenu(seccion)
   const sinMedia = subActiva === null && tabla !== null && abreSubmenu(seccion)
 
+  const rutaSub = subActiva !== null && tabla ? tabla.en[subActiva] : null
+
   const nombreActual =
     subActiva === null || !tabla
       ? t(`secciones.v${seccion}`)
@@ -399,7 +511,11 @@ export default function App() {
           />
         )}
 
-        {!conEscena && !sinMedia && (
+        {!conEscena && !sinMedia && rutaSub && PANELES[rutaSub] && (
+          <Carrusel key={rutaSub} ruta={rutaSub} paneles={PANELES[rutaSub]} />
+        )}
+
+        {!conEscena && !sinMedia && !(rutaSub && PANELES[rutaSub]) && (
           <img
             src={portadaDe(lang)}
             alt={nombreActual}
@@ -498,7 +614,3 @@ export default function App() {
     </div>
   )
 }
-
-
-
-
