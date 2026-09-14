@@ -50,10 +50,10 @@ function claseBoton(activo: boolean, creciendo = true) {
     // doce y el resto de la columna queda vacio
     creciendo ? 'flex-none basis-[calc(100%/12)]' : 'flex-none basis-[calc(100%/12)]',
     'transition-colors sm:px-3 sm:py-2 sm:text-[1.05rem] sm:tracking-[0.14em]',
-    'border-l-[3px]',
+    'border-y border-y-crema border-l-[3px]',
     activo
-      ? 'border-accent bg-logo text-crema'
-      : 'border-transparent text-muted hover:border-line hover:text-crema'
+      ? 'border-l-accent bg-logo text-crema'
+      : 'border-l-transparent text-muted hover:border-l-line hover:text-crema'
   ].join(' ')
 }
 
@@ -403,6 +403,7 @@ export default function App() {
     </div>
   )
 }
+
 
 
 
