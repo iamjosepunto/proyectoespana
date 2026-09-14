@@ -1,25 +1,22 @@
 // UBICACION: src/App.tsx
 import { useEffect, useRef, useState } from 'react'
-import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import type { SupportedLanguage } from './i18n'
 import i18next from './i18n'
 import { APPS, SLUGS_APPS, esIdiomaValido, leerRuta, rutaDe } from './rutas'
 
-const VELOCIDADES = [1, 1.5, 2, 3, 4]
-
 const PORTADAS: Record<SupportedLanguage, string[]> = {
   // El numero del archivo es el del tutorial, que empieza en 1, no en 0
-  en: ['/portada-construccion.webp', '/portada-construccion.webp'],
-  es: ['/portada-construccion.webp', '/portada-construccion.webp']
+  en: ['/portada-construccion-en.webp', '/portada-construccion-en.webp'],
+  es: ['/portada-construccion-es.webp', '/portada-construccion-es.webp']
 }
 
 // Las dos apps llevan su portada por nombre y no por numero: asi no hay que
 // rehacerlas si algun dia cambia la posicion de APPS en la lista
 const PORTADAS_APPS: Record<SupportedLanguage, string[]> = {
-  en: ['/portada-construccion.webp'],
-  es: ['/portada-construccion.webp']
+  en: ['/portada-construccion-en.webp'],
+  es: ['/portada-construccion-es.webp']
 }
 
 // La portada depende del idioma activo; un idioma inesperado cae al ingles
@@ -54,12 +51,6 @@ function videoDe(idioma: string, indice: number, sub: number | null) {
   const grabado = GRABADOS[indice + 1]
   if (!grabado) return EN_OBRAS
   return grabado[esIdiomaValido(idioma) ? idioma : 'en']
-}
-
-function reloj(segundos: number) {
-  const m = Math.floor(segundos / 60)
-  const s = Math.floor(segundos % 60)
-  return `${m}:${String(s).padStart(2, '0')}`
 }
 
 const OG_LOCALES: Record<string, string> = {
@@ -107,34 +98,23 @@ export default function App() {
   const { t, i18n } = useTranslation()
   const language = i18n.resolvedLanguage ?? 'en'
   const video = useRef<HTMLVideoElement>(null)
-  const [animacionLista, setAnimacionLista] = useState(false)
   const [intro, setIntro] = useState<'dentro' | 'saliendo' | 'fuera'>('dentro')
-  const [posicionPanel, setPosicionPanel] = useState<number | null>(null)
-  const [panelVisible, setPanelVisible] = useState(false)
   const [videoActivo, setVideoActivo] = useState(RUTA_INICIAL?.indice ?? 0)
   const [appActiva, setAppActiva] = useState<number | null>(SUB_INICIAL)
   // El submenu se abre al entrar en APPS y tambien al llegar por una ruta anidada
   const [enApps, setEnApps] = useState(RUTA_INICIAL?.indice === APPS)
   const [pantallaCompleta, setPantallaCompleta] = useState(false)
-  const [cajaUtil, setCajaUtil] = useState<{ izq: number; ancho: number } | null>(null)
   const menu = useRef<HTMLElement>(null)
   const [borde, setBorde] = useState({ izq: 0, der: 0, ancho: 0 })
   const [esEscritorio, setEsEscritorio] = useState(false)
-  const ocultador = useRef<number | null>(null)
   const zonaVideo = useRef<HTMLDivElement>(null)
-  const panel = useRef<HTMLDivElement>(null)
   const pie = useRef<HTMLElement>(null)
-  const arrastre = useRef<{ desdeY: number; desdePos: number } | null>(null)
   const logoIntro = useRef<HTMLImageElement>(null)
   const logoCabecera = useRef<HTMLImageElement>(null)
   const sloganIntro = useRef<HTMLParagraphElement>(null)
   const sloganCabecera = useRef<HTMLParagraphElement>(null)
   const [viaje, setViaje] = useState<string | undefined>(undefined)
   const [viajeSlogan, setViajeSlogan] = useState<string | undefined>(undefined)
-  const [enPausa, setEnPausa] = useState(true)
-  const [velocidad, setVelocidad] = useState(0)
-  const [tiempo, setTiempo] = useState(0)
-  const [duracion, setDuracion] = useState(0)
 
   // La presentacion entra, se mantiene y el logo viaja a la cabecera
   useEffect(() => {
@@ -158,115 +138,12 @@ export default function App() {
     )
   }, [intro])
 
-  // Se reinicia el reproductor cada vez que cambia el archivo, sea por cambio de
-  // punto o de idioma. Los puntos en obras comparten archivo, asi que sin load()
-  // el <video> conservaria el fotograma ya decodificado y no se veria la portada
-  // nueva. Y al cambiar de idioma el navegador recarga parado, asi que los
-  // botones tienen que volver a pausa en vez de seguir mostrando la marcha
+  // Se recarga cada vez que cambia el archivo, sea por cambio de punto o de
+  // idioma. Los puntos en obras comparten archivo, asi que sin load() el <video>
+  // conservaria el fotograma ya decodificado y no se veria la portada nueva
   useEffect(() => {
     video.current?.load()
-    setEnPausa(true)
-    setTiempo(0)
-    setDuracion(0)
-    setAnimacionLista(false)
   }, [videoActivo, appActiva, language])
-
-  // Navegadores con ahorro de datos ignoran el preload y no disparan onLoadedData.
-  // Se atiende a varios eventos y, si ninguno llega, se muestra igualmente
-  useEffect(() => {
-    const v = video.current
-    if (!v) return
-    const listo = () => setAnimacionLista(true)
-    const eventos = ['loadedmetadata', 'loadeddata', 'canplay', 'error'] as const
-    eventos.forEach((e) => v.addEventListener(e, listo))
-    if (v.readyState >= 1) listo()
-    const respaldo = window.setTimeout(listo, 4000)
-    return () => {
-      eventos.forEach((e) => v.removeEventListener(e, listo))
-      window.clearTimeout(respaldo)
-    }
-  }, [videoActivo, appActiva])
-
-  // Mantiene sincronizados el reloj y la barra con la reproduccion
-  useEffect(() => {
-    const v = video.current
-    if (!v) return
-    // defaultPlaybackRate es el que el navegador aplica al cargar la fuente
-    v.defaultPlaybackRate = VELOCIDADES[0]
-    v.playbackRate = VELOCIDADES[0]
-    const alAvanzar = () => setTiempo(v.currentTime)
-    const alTenerDatos = () => setDuracion(Number.isFinite(v.duration) ? v.duration : 0)
-    v.addEventListener('timeupdate', alAvanzar)
-    v.addEventListener('loadedmetadata', alTenerDatos)
-    alTenerDatos()
-    return () => {
-      v.removeEventListener('timeupdate', alAvanzar)
-      v.removeEventListener('loadedmetadata', alTenerDatos)
-    }
-  }, [])
-
-  // El navegador reinicia playbackRate al cargar el video, hay que reaplicarlo
-  useEffect(() => {
-    if (video.current) video.current.playbackRate = VELOCIDADES[velocidad]
-  }, [velocidad, animacionLista])
-
-  // Un solo boton recorre las velocidades y vuelve al principio
-  const siguienteVelocidad = () => {
-    setVelocidad((i) => (i + 1) % VELOCIDADES.length)
-  }
-
-  // El panel se retira solo si nadie lo toca
-  const posponerOcultado = () => {
-    if (ocultador.current) window.clearTimeout(ocultador.current)
-    ocultador.current = window.setTimeout(() => setPanelVisible(false), 4000)
-  }
-
-  const alternarPanel = () => {
-    setPanelVisible((visible) => {
-      if (!visible) posponerOcultado()
-      return !visible
-    })
-  }
-
-  // Al terminar la presentacion el panel se muestra y arranca su cuenta atras
-  useEffect(() => {
-    if (intro !== 'fuera') return
-    setPanelVisible(true)
-    posponerOcultado()
-    return () => {
-      if (ocultador.current) window.clearTimeout(ocultador.current)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [intro])
-
-  // El panel se arrastra solo en vertical y sin salirse del area del video
-  const empezarArrastre = (e: ReactPointerEvent<HTMLDivElement>) => {
-    posponerOcultado()
-    if ((e.target as HTMLElement).closest('button, input')) return
-    const zona = zonaVideo.current
-    const p = panel.current
-    if (!zona || !p) return
-    arrastre.current = {
-      desdeY: e.clientY,
-      desdePos: p.getBoundingClientRect().top - zona.getBoundingClientRect().top
-    }
-    p.setPointerCapture(e.pointerId)
-  }
-
-  const moverArrastre = (e: ReactPointerEvent<HTMLDivElement>) => {
-    const a = arrastre.current
-    const zona = zonaVideo.current
-    const p = panel.current
-    if (!a || !zona || !p) return
-    const tope = zona.clientHeight - p.offsetHeight
-    setPosicionPanel(Math.min(tope, Math.max(0, a.desdePos + (e.clientY - a.desdeY))))
-  }
-
-  const soltarArrastre = (e: ReactPointerEvent<HTMLDivElement>) => {
-    posponerOcultado()
-    arrastre.current = null
-    panel.current?.releasePointerCapture(e.pointerId)
-  }
 
   // Si el navegador no admite pantalla completa sobre el contenedor (Safari en iPhone),
   // se expande por CSS y el resultado visual es el mismo
@@ -317,24 +194,6 @@ export default function App() {
     }
   }, [])
 
-  // Al cambiar el tamano de la zona: recolocar el panel dentro y ajustarlo al video visible
-  useEffect(() => {
-    const z = zonaVideo.current
-    if (!z) return
-    const reajustar = () => {
-      const ancho = z.clientWidth
-      const alto = z.clientHeight
-      const util = Math.min(ancho, (alto * 720) / 1606)
-      setCajaUtil({ izq: Math.round((ancho - util) / 2), ancho: Math.round(util) })
-      const alturaPanel = panel.current?.offsetHeight ?? 0
-      setPosicionPanel((pos) => (pos === null ? null : Math.min(Math.max(0, alto - alturaPanel), pos)))
-    }
-    const observador = new ResizeObserver(reajustar)
-    observador.observe(z)
-    reajustar()
-    return () => observador.disconnect()
-  }, [animacionLista])
-
   useEffect(() => {
     const alCambiar = () => setPantallaCompleta(Boolean(document.fullscreenElement))
     document.addEventListener('fullscreenchange', alCambiar)
@@ -344,12 +203,6 @@ export default function App() {
   const mostrarVideo = (indice: number, sub: number | null = null) => {
     setVideoActivo(indice)
     setAppActiva(sub)
-    setEnPausa(true)
-    setTiempo(0)
-    setDuracion(0)
-    setAnimacionLista(false)
-    setPanelVisible(true)
-    posponerOcultado()
   }
 
   // Pulsar en el menu anade una entrada al historial: el boton atras funciona
@@ -389,33 +242,6 @@ export default function App() {
 
   // APPS es solo un enlace al submenu: no tiene portada ni video propios
   const sinMedia = videoActivo === APPS && appActiva === null
-
-  const irA = (segundos: number) => {
-    const v = video.current
-    if (!v) return
-    v.currentTime = segundos
-    setTiempo(segundos)
-  }
-
-  const alternarPausa = () => {
-    const v = video.current
-    if (!v) return
-    if (v.paused) {
-      void v.play()
-      setEnPausa(false)
-    } else {
-      v.pause()
-      setEnPausa(true)
-    }
-  }
-
-  const detener = () => {
-    const v = video.current
-    if (!v) return
-    v.pause()
-    v.currentTime = 0
-    setEnPausa(true)
-  }
 
   // El idioma y el video activos deben reflejarse en el documento y en la
   // direccion. Tambien cubre la entrada por la raiz, que no tiene camino valido
@@ -514,165 +340,12 @@ export default function App() {
           muted
           playsInline
           preload="metadata"
-          onLoadedData={() => setAnimacionLista(true)}
-          onClick={alternarPanel}
           onDoubleClick={alternarPantallaCompleta}
           onEnded={() => {
-            setEnPausa(true)
             if (video.current) video.current.currentTime = 0
-            setTiempo(0)
           }}
           className="h-full w-full object-contain"
         />
-        )}
-
-        {!sinMedia && !animacionLista && (
-          <div
-            role="status"
-            aria-live="polite"
-            className="pointer-events-none absolute inset-0 flex items-center justify-center gap-[18px]"
-          >
-            <span
-              aria-hidden="true"
-              className="size-[30px] animate-spin rounded-full border-[3px] border-line border-t-accent"
-            />
-            <span className="font-mono text-lg uppercase tracking-[0.16em] text-muted">
-              {t('hero.loading')}
-            </span>
-          </div>
-        )}
-        {!sinMedia && (
-        <div
-            ref={panel}
-            onPointerDown={empezarArrastre}
-            onPointerMove={moverArrastre}
-            onPointerUp={soltarArrastre}
-            onPointerCancel={soltarArrastre}
-            title={t('controls.drag')}
-            style={{
-              ...(posicionPanel === null ? {} : { top: posicionPanel, bottom: 'auto' }),
-              ...(pantallaCompleta && cajaUtil
-                ? { left: cajaUtil.izq, right: 'auto', width: cajaUtil.ancho }
-                : {})
-            }}
-            className={[
-              'absolute inset-x-0 z-20 select-none border-y border-line/60 bg-surface/50 px-2 py-1.5 backdrop-blur-sm',
-              'cursor-ns-resize touch-none transition-opacity duration-300',
-              panelVisible ? 'opacity-100' : 'pointer-events-none opacity-0',
-              posicionPanel === null ? 'bottom-36 sm:bottom-44' : ''
-            ].join(' ')}
-          >
-            <div className="flex items-center justify-start gap-3">
-              {(
-                [
-                  {
-                    etiqueta: t('controls.stop'),
-                    icono: <span className="block h-[0.85em] w-[0.85em] bg-current" />,
-                    accion: detener
-                  },
-                  {
-                    etiqueta: enPausa ? t('controls.play') : t('controls.pause'),
-                    icono: enPausa ? (
-                      <svg viewBox="0 0 10 12" fill="currentColor" className="block h-[0.85em] w-[0.72em]">
-                        <path d="M0 0 10 6 0 12Z" />
-                      </svg>
-                    ) : (
-                      <span className="flex items-center gap-[0.1em]">
-                        <span className="h-[0.85em] w-[0.32em] bg-current" />
-                        <span className="h-[0.85em] w-[0.32em] bg-current" />
-                      </span>
-                    ),
-                    accion: alternarPausa
-                  }
-                ] as { etiqueta: string; icono: ReactNode; accion: () => void }[]
-              ).map((b) => (
-                <button
-                  key={b.etiqueta}
-                  type="button"
-                  onClick={b.accion}
-                  aria-label={b.etiqueta}
-                  title={b.etiqueta}
-                  className="cursor-pointer rounded-sm px-2 py-1 font-mono text-[2.45rem] leading-none text-crema transition-colors hover:bg-line/40 sm:text-[2.625rem]"
-                >
-                  {b.icono}
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={siguienteVelocidad}
-                aria-label={t('controls.faster')}
-                title={t('controls.faster')}
-                className="-ml-2 cursor-pointer rounded-sm px-2 py-1 font-mono text-[2.45rem] leading-none text-crema transition-colors hover:bg-line/40 sm:text-[2.625rem]"
-              >
-                {VELOCIDADES[velocidad]}x
-              </button>
-
-              <button
-                type="button"
-                onClick={alternarPantallaCompleta}
-                aria-label={pantallaCompleta ? t('controls.exitFullscreen') : t('controls.fullscreen')}
-                title={pantallaCompleta ? t('controls.exitFullscreen') : t('controls.fullscreen')}
-                className="cursor-pointer rounded-sm px-2 py-1 font-mono text-[2.45rem] leading-none text-crema transition-colors hover:bg-line/40 sm:text-[2.625rem]"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="block h-[0.85em] w-[0.85em]"
-                >
-                  {pantallaCompleta ? (
-                    <>
-                      <path d="M9 3v6H3" />
-                      <path d="M15 3v6h6" />
-                      <path d="M9 21v-6H3" />
-                      <path d="M15 21v-6h6" />
-                    </>
-                  ) : (
-                    <>
-                      <path d="M3 9V3h6" />
-                      <path d="M21 9V3h-6" />
-                      <path d="M3 15v6h6" />
-                      <path d="M21 15v6h-6" />
-                    </>
-                  )}
-                </svg>
-              </button>
-
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 16 46"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.1}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="ml-auto h-[46px] w-[18px] shrink-0 text-crema/60"
-              >
-                <path d="M8 3v40" />
-                <path d="M2.5 8 8 3l5.5 5" />
-                <path d="M2.5 38 8 43l5.5-5" />
-              </svg>
-            </div>
-
-            <div className="mt-1.5 flex items-center gap-2">
-              <input
-                type="range"
-                min={0}
-                max={duracion || 0}
-                step={0.1}
-                value={Math.min(tiempo, duracion || 0)}
-                onChange={(e) => irA(Number(e.target.value))}
-                aria-label={t('controls.timeline')}
-                className="h-1 w-full cursor-pointer touch-auto accent-crema"
-              />
-              <span className="shrink-0 font-mono text-[1.3rem] leading-none tabular-nums text-muted sm:text-[1.4rem]">
-                {reloj(tiempo)} / {reloj(duracion)}
-              </span>
-            </div>
-        </div>
         )}
       </div>
 
@@ -684,7 +357,7 @@ export default function App() {
         width={600}
         height={547}
         className={[
-          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[98px] sm:w-36',
+          'absolute left-0 top-0 z-10 w-[68px] sm:ml-[60px] sm:w-36',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       />
@@ -694,7 +367,7 @@ export default function App() {
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
           'absolute left-[72px] right-[110px] top-[12px] z-10 whitespace-pre text-center font-mono text-[0.7rem] uppercase leading-snug tracking-[0.06em] text-crema',
-          'sm:left-0 sm:ml-[5px] sm:right-auto sm:top-[128px] sm:w-[330px] sm:text-[1.15rem] sm:tracking-[0.1em]',
+          'sm:left-0 sm:ml-[5px] sm:right-auto sm:top-[128px] sm:w-[263px] sm:text-[0.93rem] sm:tracking-[0.1em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
       >
@@ -757,7 +430,7 @@ export default function App() {
         } className="absolute bottom-1 left-2 z-20 flex flex-wrap items-center gap-x-1.5 gap-y-1 font-mono text-[0.7rem] tracking-[0.1em] text-muted/70 sm:bottom-2 sm:justify-start sm:text-left sm:text-xs">
         <span className="flex flex-none items-center gap-1.5 whitespace-nowrap">
           © {new Date().getFullYear()}
-          <a href="https://xn--proyectoespaa-tkb.dev" className="text-crema/80 transition-colors hover:text-crema">proyectoespa&ntilde;a.dev</a>
+          By<a href="https://iamjosepunto.github.io" target="_blank" rel="noopener noreferrer" className="text-crema/80 transition-colors hover:text-crema">IamJosePunto.GitHub.io</a>
         </span>
         <span className="w-full whitespace-nowrap text-[0.6rem] sm:w-auto sm:whitespace-normal sm:text-xs">
           {t('footer.rights')}
@@ -766,32 +439,4 @@ export default function App() {
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
