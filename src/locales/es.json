@@ -23,8 +23,12 @@
     "volver": "Volver",
     "what-it-is": "Qué es ProyectoEspaña.dev",
     "sentinels": "Quiénes son los Centinelas",
-    "take-part": "Cómo participar",
-    "caballas": "Caballas"
+    "take-part": "Cómo participar"
+  },
+  "campanas": {
+    "titulo": "Todavía no hay campañas activas",
+    "texto": "ProyectoEspaña.dev acaba de empezar. Una campaña se abre cuando hay un Centinela detrás: alguien con trayectoria, una cobertura que hacer y un equipo concreto que le falta. Cuando la primera esté en marcha, aparecerá aquí.",
+    "enlace": "Preséntate como Centinela"
   },
   "paneles": {
     "anterior": "Anterior",

@@ -23,8 +23,12 @@
     "volver": "Back",
     "what-it-is": "What ProyectoEspaña.dev is",
     "sentinels": "Who the Sentinels are",
-    "take-part": "How to take part",
-    "caballas": "Caballas"
+    "take-part": "How to take part"
+  },
+  "campanas": {
+    "titulo": "There are no active campaigns yet",
+    "texto": "ProyectoEspaña.dev has only just started. A campaign opens when there is a Sentinel behind it: someone with a track record, coverage to do and a specific piece of gear they are missing. The first one will show up here once it is running.",
+    "enlace": "Apply as a Sentinel"
   },
   "paneles": {
     "anterior": "Previous",

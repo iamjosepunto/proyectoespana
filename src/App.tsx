@@ -66,6 +66,17 @@ function abreSubmenu(indice: number) {
   return CON_SUBMENU.includes(SLUGS.en[indice]) && subsDe(indice) !== null
 }
 
+// La subruta de participar se localiza por su slug ingles, no por su posicion:
+// asi el enlace de la pantalla de campanas sigue valiendo si cambia el orden
+function destinoParticipar() {
+  const indice = SLUGS.en.indexOf('introduction')
+  const tabla = indice === -1 ? null : subsDe(indice)
+  const sub = tabla ? tabla.en.indexOf('take-part') : -1
+  return indice === -1 || sub === -1 ? null : { indice, sub }
+}
+
+const PARTICIPAR = destinoParticipar()
+
 // Una seccion con submenu nunca se queda vacia: si no viene subruta, se abre la primera
 const SUB_INICIAL =
   RUTA_INICIAL === null
@@ -294,6 +305,38 @@ function Carrusel({
   )
 }
 
+// Pantalla de la seccion de campanas mientras no haya ninguna abierta
+function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null }) {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      className="flex h-full w-full flex-col justify-center border border-crema bg-fondo"
+      style={{ containerType: 'size', padding: '8cqw' }}
+    >
+      <h2
+        className="font-mono uppercase text-accent"
+        style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
+      >
+        {t('campanas.titulo')}
+      </h2>
+      <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+        {t('campanas.texto')}
+      </p>
+      {alParticipar && (
+        <button
+          type="button"
+          onClick={alParticipar}
+          className="cursor-pointer self-start font-mono uppercase text-crema transition-colors hover:text-accent"
+          style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
+        >
+          {`${t('campanas.enlace')} >>`}
+        </button>
+      )}
+    </div>
+  )
+}
+
 export default function App() {
   const { t, i18n } = useTranslation()
   const language = i18n.resolvedLanguage ?? 'en'
@@ -420,6 +463,14 @@ export default function App() {
     window.history.pushState(null, '', rutaDe(language, seccion, null))
   }
 
+  // Salto desde la pantalla de campanas a la subruta de participar
+  const irAParticipar = () => {
+    if (!PARTICIPAR) return
+    setEnSubmenu(false)
+    mostrar(PARTICIPAR.indice, PARTICIPAR.sub)
+    window.history.pushState(null, '', rutaDe(language, PARTICIPAR.indice, PARTICIPAR.sub))
+  }
+
   // VOLVER cierra el submenu y baja al primer punto de la lista: la seccion con
   // submenu es solo un enlace, no debe quedarse marcada ni dejar el hueco vacio
   const salirDelSubmenu = () => {
@@ -449,6 +500,8 @@ export default function App() {
   const sinMedia = subActiva === null && tabla !== null && abreSubmenu(seccion)
 
   const rutaSub = subActiva !== null && tabla ? tabla.en[subActiva] : null
+  // Campanas activas no tiene subrutas mientras no haya ninguna campana abierta
+  const enCampanas = SLUGS.en[seccion] === 'active-campaigns' && subActiva === null
 
   const nombreActual =
     subActiva === null || !tabla
@@ -551,6 +604,10 @@ export default function App() {
           />
         )}
 
+        {!conEscena && !sinMedia && enCampanas && (
+          <PantallaCampanas alParticipar={PARTICIPAR ? irAParticipar : null} />
+        )}
+
         {!conEscena && !sinMedia && rutaSub && PANELES[rutaSub] && (
           <Carrusel
             key={rutaSub}
@@ -560,7 +617,7 @@ export default function App() {
           />
         )}
 
-        {!conEscena && !sinMedia && !(rutaSub && PANELES[rutaSub]) && (
+        {!conEscena && !sinMedia && !enCampanas && !(rutaSub && PANELES[rutaSub]) && (
           <img
             src={portadaDe(lang)}
             alt={nombreActual}
