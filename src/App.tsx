@@ -30,10 +30,10 @@ const PANELES: Record<string, Panel[]> = {
     { clave: 'p5', imagen: '/financiacion.webp' }
   ],
   sentinels: [
-    { clave: 'p1', imagen: null },
-    { clave: 'p2', imagen: null },
-    { clave: 'p3', imagen: null },
-    { clave: 'p4', imagen: null }
+    { clave: 'p1', imagen: '/centinela.webp' },
+    { clave: 'p2', imagen: '/trayectoria.webp' },
+    { clave: 'p3', imagen: '/entrega.webp' },
+    { clave: 'p4', imagen: '/credibilidad.webp' }
   ],
   'take-part': [
     { clave: 'p1', imagen: null },
@@ -312,27 +312,29 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
   return (
     <div
       className="flex h-full w-full flex-col justify-center border border-crema bg-fondo"
-      style={{ containerType: 'size', padding: '8cqw' }}
+      style={{ containerType: 'size' }}
     >
-      <h2
-        className="font-mono uppercase text-accent"
-        style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
-      >
-        {t('campanas.titulo')}
-      </h2>
-      <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
-        {t('campanas.texto')}
-      </p>
-      {alParticipar && (
-        <button
-          type="button"
-          onClick={alParticipar}
-          className="cursor-pointer self-start font-mono uppercase text-crema transition-colors hover:text-accent"
-          style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
+      <div style={{ padding: '8cqw' }}>
+        <h2
+          className="font-mono uppercase text-accent"
+          style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
         >
-          {`${t('campanas.enlace')} >>`}
-        </button>
-      )}
+          {t('campanas.titulo')}
+        </h2>
+        <p className="text-crema/85" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+          {t('campanas.texto')}
+        </p>
+        {alParticipar && (
+          <button
+            type="button"
+            onClick={alParticipar}
+            className="cursor-pointer font-mono uppercase text-crema transition-colors hover:text-accent"
+            style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
+          >
+            {`${t('campanas.enlace')} >>`}
+          </button>
+        )}
+      </div>
     </div>
   )
 }

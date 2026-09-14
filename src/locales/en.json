@@ -27,7 +27,7 @@
   },
   "campanas": {
     "titulo": "There are no active campaigns yet",
-    "texto": "ProyectoEspaña.dev has only just started. A campaign opens when there is a Sentinel behind it: someone with a track record, coverage to do and a specific piece of gear they are missing. The first one will show up here once it is running.",
+    "texto": "This is where the crowdfunding campaigns will appear: one per Sentinel, with the gear it asks for — smart glasses, a drone, a thermal camera, an antenna —, what coverage it is for and what it costs. None is open yet, ProyectoEspaña.dev has only just started.",
     "enlace": "Apply as a Sentinel"
   },
   "paneles": {
