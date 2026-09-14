@@ -344,7 +344,7 @@ export default function App() {
           onEnded={() => {
             if (video.current) video.current.currentTime = 0
           }}
-          className="h-full w-full object-contain"
+          className="h-full w-full border border-crema object-contain"
         />
         )}
       </div>
@@ -366,7 +366,7 @@ export default function App() {
         ref={sloganCabecera}
         style={esEscritorio && !pantallaCompleta ? { left: borde.izq } : undefined}
         className={[
-          'absolute left-[72px] right-[110px] top-[12px] z-10 whitespace-pre text-center font-mono text-[0.7rem] uppercase leading-snug tracking-[0.06em] text-crema',
+          'absolute left-[72px] right-[110px] top-[20px] z-10 whitespace-pre text-center font-mono text-[0.78rem] uppercase leading-snug tracking-[0.06em] text-crema',
           'sm:left-0 sm:ml-[5px] sm:right-auto sm:top-[128px] sm:w-[263px] sm:text-[0.93rem] sm:tracking-[0.1em]',
           intro === 'fuera' ? 'opacity-100' : 'opacity-0'
         ].join(' ')}
@@ -417,7 +417,7 @@ export default function App() {
         </>
       )}
 
-      <header style={esEscritorio && !pantallaCompleta ? { left: borde.der } : undefined} className="absolute right-1 top-3 z-20 sm:right-auto sm:top-4">
+      <header style={esEscritorio && !pantallaCompleta ? { left: borde.der } : undefined} className="absolute right-1 top-[21px] z-20 sm:right-auto sm:top-4">
         <LanguageSwitcher />
       </header>
 
@@ -427,16 +427,24 @@ export default function App() {
           esEscritorio && !pantallaCompleta
             ? { left: borde.der + SEPARACION, maxWidth: borde.ancho }
             : undefined
-        } className="absolute bottom-1 left-2 z-20 flex flex-wrap items-center gap-x-1.5 gap-y-1 font-mono text-[0.7rem] tracking-[0.1em] text-muted/70 sm:bottom-2 sm:justify-start sm:text-left sm:text-xs">
-        <span className="flex flex-none items-center gap-1.5 whitespace-nowrap">
+        } className="absolute bottom-1 left-[70px] right-0 z-20 flex flex-col items-center gap-y-0.5 font-mono text-[0.7rem] tracking-[0.1em] text-muted/70 sm:bottom-2 sm:left-2 sm:right-auto sm:items-start sm:text-left sm:text-xs">
+        <span className="whitespace-nowrap">
           © {new Date().getFullYear()}
-          By<a href="https://iamjosepunto.github.io" target="_blank" rel="noopener noreferrer" className="text-crema/80 transition-colors hover:text-crema">IamJosePunto.GitHub.io</a>
+          </span><span className="flex items-center gap-1.5 whitespace-nowrap">By<a href="https://iamjosepunto.github.io" target="_blank" rel="noopener noreferrer" className="text-crema/80 transition-colors hover:text-crema">IamJosePunto.GitHub.io</a>
         </span>
-        <span className="w-full whitespace-nowrap text-[0.6rem] sm:w-auto sm:whitespace-normal sm:text-xs">
+        <span className="whitespace-nowrap text-[0.6rem] sm:text-xs">
           {t('footer.rights')}
         </span>
       </footer>
     </div>
   )
 }
+
+
+
+
+
+
+
+
 
