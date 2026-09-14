@@ -122,7 +122,11 @@ function EscenaIntroduccion({
 }) {
   const ALTO = 150
   const HUECO = 44
-  const PRIMERA = 1030
+  const LOGO_Y = 70
+  const LOGO_LADO = 720
+  // La primera zona arranca un hueco por debajo de la base del logo: asi la
+  // separacion con el logo es la misma que la que hay entre zonas
+  const PRIMERA = LOGO_Y + LOGO_LADO + HUECO
 
   return (
     <svg
@@ -133,7 +137,7 @@ function EscenaIntroduccion({
     >
       <rect width="720" height="1606" fill="var(--color-fondo)" />
 
-      <image x="0" y="70" width="720" height="720" href="/logo-proyectoespana.webp" />
+      <image x="0" y={LOGO_Y} width={LOGO_LADO} height={LOGO_LADO} href="/logo-proyectoespana.webp" />
 
       {etiquetas.map((texto, i) => (
         <g
@@ -307,7 +311,7 @@ function BloqueCorreo() {
     <div className="flex flex-wrap items-center" style={{ gap: '4cqw', marginTop: '6cqw' }}>
       <a
         href={`mailto:${CORREO}`}
-        className="break-all font-mono text-enlace underline decoration-enlace/50 underline-offset-4 transition-colors hover:text-accent"
+        className="break-all font-mono text-crema underline decoration-accent/70 underline-offset-4 transition-colors hover:text-accent"
         style={{ fontSize: '5cqw', letterSpacing: '0.04em' }}
       >
         {CORREO}
@@ -315,7 +319,7 @@ function BloqueCorreo() {
       <button
         type="button"
         onClick={copiar}
-        className="cursor-pointer border border-enlace/50 font-mono uppercase text-enlace transition-colors hover:border-accent hover:text-accent"
+        className="cursor-pointer border border-accent bg-accent font-mono uppercase text-deep transition-colors hover:border-crema hover:bg-crema"
         style={{ fontSize: '4cqw', letterSpacing: '0.1em', padding: '1.5cqw 3cqw' }}
       >
         {copiado ? t('contacto.copiado') : t('contacto.copiar')}
