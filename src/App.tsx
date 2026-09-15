@@ -81,6 +81,20 @@ function destinoParticipar() {
 
 const PARTICIPAR = destinoParticipar()
 
+const INTRO_VISTA = 'intro-vista'
+
+// La presentacion solo tiene sentido al entrar por la puerta principal: si la
+// direccion apunta a otra seccion o a una subruta, o si ya se vio en esta
+// sesion, se entra directo al contenido
+function tocaPresentacion() {
+  if (RUTA_INICIAL && (RUTA_INICIAL.indice !== 0 || RUTA_INICIAL.sub !== null)) return false
+  try {
+    return sessionStorage.getItem(INTRO_VISTA) !== '1'
+  } catch {
+    return true
+  }
+}
+
 // Una seccion con submenu nunca se queda vacia: si no viene subruta, se abre la primera
 const SUB_INICIAL =
   RUTA_INICIAL === null
@@ -400,7 +414,9 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
 export default function App() {
   const { t, i18n } = useTranslation()
   const language = i18n.resolvedLanguage ?? 'en'
-  const [intro, setIntro] = useState<'dentro' | 'saliendo' | 'fuera'>('dentro')
+  const [intro, setIntro] = useState<'dentro' | 'saliendo' | 'fuera'>(() =>
+    tocaPresentacion() ? 'dentro' : 'fuera'
+  )
   const [seccion, setSeccion] = useState(RUTA_INICIAL?.indice ?? 0)
   const [subActiva, setSubActiva] = useState<number | null>(SUB_INICIAL)
   // El submenu se abre al entrar en la seccion y tambien al llegar por una ruta anidada
@@ -420,15 +436,33 @@ export default function App() {
   const [viaje, setViaje] = useState<string | undefined>(undefined)
   const [viajeSlogan, setViajeSlogan] = useState<string | undefined>(undefined)
 
-  // La presentacion entra, se mantiene y el logo viaja a la cabecera
+  // La presentacion entra, se mantiene el tiempo de leer el eslogan, y se corta
+  // sola o con cualquier clic o tecla
   useEffect(() => {
-    const aSalir = setTimeout(() => setIntro('saliendo'), 6000)
-    const aFuera = setTimeout(() => setIntro('fuera'), 7100)
+    if (intro !== 'dentro') return
+    try {
+      sessionStorage.setItem(INTRO_VISTA, '1')
+    } catch {
+      // Sin sessionStorage la presentacion sale en cada carga, que era lo de antes
+    }
+
+    const saltar = () => setIntro((actual) => (actual === 'dentro' ? 'saliendo' : actual))
+    const aSalir = setTimeout(saltar, 8000)
+    const sucesos = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const
+    sucesos.forEach((suceso) => window.addEventListener(suceso, saltar, { passive: true }))
+
     return () => {
       clearTimeout(aSalir)
-      clearTimeout(aFuera)
+      sucesos.forEach((suceso) => window.removeEventListener(suceso, saltar))
     }
-  }, [])
+  }, [intro])
+
+  // El vuelo del logo dura 900ms: al terminar se retira la presentacion entera
+  useEffect(() => {
+    if (intro !== 'saliendo') return
+    const aFuera = setTimeout(() => setIntro('fuera'), 1100)
+    return () => clearTimeout(aFuera)
+  }, [intro])
 
   // El destino se mide en pantalla, asi encaja con la cabecera en cualquier tamano
   useEffect(() => {
