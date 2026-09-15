@@ -258,24 +258,24 @@ function Carrusel({
             type="button"
             onClick={alVolver}
             className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '4cqw', letterSpacing: '0.1em', lineHeight: 1 }}
+            style={{ fontSize: '6cqw', letterSpacing: '0.1em', lineHeight: 1 }}
           >
             {`<< ${t('subs.volver')}`}
           </button>
         )}
 
-        <div className="ml-auto flex items-center" style={{ gap: '3.5cqw' }}>
+        <div className="ml-auto flex items-center" style={{ gap: '5.2cqw' }}>
           <button
             type="button"
             onClick={() => ir(-1)}
             aria-label={t('paneles.anterior')}
             className="cursor-pointer font-mono text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '6cqw', lineHeight: 1 }}
+            style={{ fontSize: '9cqw', lineHeight: 1 }}
           >
             &lt;
           </button>
 
-          <div className="flex" style={{ gap: '2.2cqw' }}>
+          <div className="flex" style={{ gap: '3.3cqw' }}>
             {paneles.map((p, n) => (
               <button
                 key={p.clave}
@@ -287,7 +287,7 @@ function Carrusel({
                   'cursor-pointer rounded-full transition-colors',
                   n === i ? 'bg-accent' : 'bg-line hover:bg-crema/60'
                 ].join(' ')}
-                style={{ width: '2.4cqw', height: '2.4cqw' }}
+                style={{ width: '3.6cqw', height: '3.6cqw' }}
               />
             ))}
           </div>
@@ -297,7 +297,7 @@ function Carrusel({
             onClick={() => ir(1)}
             aria-label={t('paneles.siguiente')}
             className="cursor-pointer font-mono text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '6cqw', lineHeight: 1 }}
+            style={{ fontSize: '9cqw', lineHeight: 1 }}
           >
             &gt;
           </button>
@@ -348,18 +348,18 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
 
   return (
     <div
-      className="flex h-full w-full flex-col justify-center overflow-y-auto border border-crema bg-fondo"
+      className="flex h-full w-full flex-col overflow-y-auto border border-crema bg-fondo"
       style={{ containerType: 'size' }}
     >
-      <div style={{ padding: '8cqw' }}>
-        <img
-          src="/contacto.webp"
-          alt={t('contacto.titulo')}
-          width={900}
-          height={900}
-          className="mx-auto aspect-square w-[55%] object-cover"
-          style={{ marginBottom: '6cqw' }}
-        />
+      <img
+        src="/contacto.webp"
+        alt={t('contacto.titulo')}
+        width={900}
+        height={900}
+        className="w-full object-cover"
+        style={{ height: '31cqh', marginTop: '5cqw' }}
+      />
+      <div style={{ padding: '6cqw' }}>
         <h2
           className="font-mono uppercase text-accent"
           style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
@@ -375,7 +375,7 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
             type="button"
             onClick={alParticipar}
             className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
+            style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
           >
             {`${t('subs.take-part')} >>`}
           </button>
@@ -391,18 +391,18 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
 
   return (
     <div
-      className="flex h-full w-full flex-col justify-center overflow-y-auto border border-crema bg-fondo"
+      className="flex h-full w-full flex-col overflow-y-auto border border-crema bg-fondo"
       style={{ containerType: 'size' }}
     >
-      <div style={{ padding: '8cqw' }}>
-        <img
-          src="/sin-campanas.webp"
-          alt={t('campanas.titulo')}
-          width={900}
-          height={900}
-          className="mx-auto aspect-square w-[55%] object-cover"
-          style={{ marginBottom: '6cqw' }}
-        />
+      <img
+        src="/sin-campanas.webp"
+        alt={t('campanas.titulo')}
+        width={900}
+        height={900}
+        className="w-full object-cover"
+        style={{ height: '31cqh', marginTop: '5cqw' }}
+      />
+      <div style={{ padding: '6cqw' }}>
         <h2
           className="font-mono uppercase text-accent"
           style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
@@ -417,7 +417,7 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
             type="button"
             onClick={alParticipar}
             className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '5cqw', letterSpacing: '0.1em', marginTop: '8cqw' }}
+            style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
           >
             {`${t('campanas.enlace')} >>`}
           </button>
