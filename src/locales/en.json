@@ -29,6 +29,7 @@
   "contacto": {
     "titulo": "Contact",
     "texto": "One single contact email address for everything: Sentinel applications, offers of gear or technical help, and any question about how the project works. It is answered from there.",
+    "enlace": "Apply as a Sentinel",
     "copiar": "Copy contact email",
     "copiado": "Email copied"
   },

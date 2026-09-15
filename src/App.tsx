@@ -377,7 +377,7 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
             className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
             style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
           >
-            {`${t('subs.take-part')} >>`}
+            {`${t('contacto.enlace')} >>`}
           </button>
         )}
       </div>

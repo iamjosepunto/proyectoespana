@@ -29,6 +29,7 @@
   "contacto": {
     "titulo": "Contacto",
     "texto": "Una sola dirección de email de contacto para todo: candidaturas a Centinela, ofrecimientos de equipo o de ayuda técnica, y cualquier duda sobre cómo funciona el proyecto. Se contesta desde ahí mismo.",
+    "enlace": "Preséntate como Centinela",
     "copiar": "Copiar email de contacto",
     "copiado": "Email copiado"
   },
