@@ -348,10 +348,18 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
 
   return (
     <div
-      className="flex h-full w-full flex-col justify-center border border-crema bg-fondo"
+      className="flex h-full w-full flex-col justify-center overflow-y-auto border border-crema bg-fondo"
       style={{ containerType: 'size' }}
     >
       <div style={{ padding: '8cqw' }}>
+        <img
+          src="/contacto.webp"
+          alt={t('contacto.titulo')}
+          width={900}
+          height={900}
+          className="mx-auto aspect-square w-[55%] object-cover"
+          style={{ marginBottom: '6cqw' }}
+        />
         <h2
           className="font-mono uppercase text-accent"
           style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
@@ -383,10 +391,18 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
 
   return (
     <div
-      className="flex h-full w-full flex-col justify-center border border-crema bg-fondo"
+      className="flex h-full w-full flex-col justify-center overflow-y-auto border border-crema bg-fondo"
       style={{ containerType: 'size' }}
     >
       <div style={{ padding: '8cqw' }}>
+        <img
+          src="/sin-campanas.webp"
+          alt={t('campanas.titulo')}
+          width={900}
+          height={900}
+          className="mx-auto aspect-square w-[55%] object-cover"
+          style={{ marginBottom: '6cqw' }}
+        />
         <h2
           className="font-mono uppercase text-accent"
           style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
