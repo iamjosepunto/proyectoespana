@@ -48,7 +48,7 @@
   }
 }
 
-/* Reticulo de fondo: el "lugar" sobre el que se apoyan las apps */
+/* Reticulo de fondo: la cuadricula sobre la que se apoya el contenido */
 .field {
   background-image:
     linear-gradient(to right, var(--color-line) 1px, transparent 1px),
