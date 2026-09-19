@@ -320,7 +320,10 @@ function ImagenConAro({
   claseImg?: string
   alDobleClic?: () => void
 }) {
-  const [cargada, setCargada] = useState(false)
+  // Se guarda QUE imagen termino de cargar, no un simple si o no: al pasar de
+  // panel cambia el src y el aro vuelve solo, sin desmontar el componente
+  const [cargadaSrc, setCargadaSrc] = useState<string | null>(null)
+  const cargada = cargadaSrc === src
 
   return (
     <div className={claseCaja}>
@@ -336,8 +339,8 @@ function ImagenConAro({
         height={900}
         className={claseImg}
         onDoubleClick={alDobleClic}
-        onLoad={() => setCargada(true)}
-        onError={() => setCargada(true)}
+        onLoad={() => setCargadaSrc(src)}
+        onError={() => setCargadaSrc(src)}
       />
     </div>
   )
