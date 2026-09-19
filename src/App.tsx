@@ -206,6 +206,10 @@ function Carrusel({
   const ir = (paso: number) => setI((n) => (n + paso + total) % total)
   const panel = paneles[i]
   const base = `paneles.${ruta}.${panel.clave}`
+  // El texto no aparece hasta que esta su imagen: al cambiar de panel cambia el
+  // src y vuelve a esperar
+  const [listaSrc, setListaSrc] = useState<string | null>(null)
+  const textoVisible = !panel.imagen || listaSrc === panel.imagen
 
   return (
     <div
@@ -223,6 +227,7 @@ function Carrusel({
             src={panel.imagen}
             alt={t(`${base}.titulo`)}
             claseCaja="relative aspect-square w-full"
+            alCargar={setListaSrc}
           />
         ) : (
           <div
@@ -235,16 +240,20 @@ function Carrusel({
       </div>
 
       <div className="flex-1 overflow-hidden" style={{ padding: '5cqw' }}>
-        <h2
-          className="font-mono uppercase text-accent"
-          style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '2.5cqw' }}
-        >
-          {t(`${base}.titulo`)}
-        </h2>
-        <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
-          {t(`${base}.texto`)}
-        </p>
-        {panel.correo && <BloqueCorreo />}
+        {textoVisible && (
+          <>
+            <h2
+              className="font-mono uppercase text-accent"
+              style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '2.5cqw' }}
+            >
+              {t(`${base}.titulo`)}
+            </h2>
+            <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+              {t(`${base}.texto`)}
+            </p>
+            {panel.correo && <BloqueCorreo />}
+          </>
+        )}
       </div>
 
       <div
@@ -312,18 +321,27 @@ function ImagenConAro({
   alt,
   claseCaja,
   claseImg = 'h-full w-full object-cover',
-  alDobleClic
+  alDobleClic,
+  alCargar
 }: {
   src: string
   alt: string
   claseCaja: string
   claseImg?: string
   alDobleClic?: () => void
+  alCargar?: (src: string) => void
 }) {
   // Se guarda QUE imagen termino de cargar, no un simple si o no: al pasar de
   // panel cambia el src y el aro vuelve solo, sin desmontar el componente
   const [cargadaSrc, setCargadaSrc] = useState<string | null>(null)
   const cargada = cargadaSrc === src
+
+  // Tambien se avisa en el error: si una imagen no llega, el texto no puede
+  // quedarse escondido para siempre
+  const marcar = () => {
+    setCargadaSrc(src)
+    alCargar?.(src)
+  }
 
   return (
     <div className={claseCaja}>
@@ -339,8 +357,8 @@ function ImagenConAro({
         height={900}
         className={claseImg}
         onDoubleClick={alDobleClic}
-        onLoad={() => setCargadaSrc(src)}
-        onError={() => setCargadaSrc(src)}
+        onLoad={() => marcar()}
+        onError={() => marcar()}
       />
     </div>
   )
@@ -384,6 +402,8 @@ function BloqueCorreo() {
 // Pantalla de la seccion de contacto: texto y la direccion como enlace
 function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null }) {
   const { t } = useTranslation()
+  // El texto espera a que la imagen este descargada
+  const [lista, setLista] = useState(false)
 
   return (
     <div
@@ -394,27 +414,32 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
         src="/contacto.webp"
         alt={t('contacto.titulo')}
         claseCaja="relative mt-[5cqw] h-[31cqh] w-full shrink-0"
+        alCargar={() => setLista(true)}
       />
       <div style={{ padding: '6cqw' }}>
-        <h2
-          className="font-mono uppercase text-accent"
-          style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
-        >
-          {t('contacto.titulo')}
-        </h2>
-        <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
-          {t('contacto.texto')}
-        </p>
-        <BloqueCorreo />
-        {alParticipar && (
-          <button
-            type="button"
-            onClick={alParticipar}
-            className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
-          >
-            {`${t('contacto.enlace')} >>`}
-          </button>
+        {lista && (
+          <>
+            <h2
+              className="font-mono uppercase text-accent"
+              style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
+            >
+              {t('contacto.titulo')}
+            </h2>
+            <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+              {t('contacto.texto')}
+            </p>
+            <BloqueCorreo />
+            {alParticipar && (
+              <button
+                type="button"
+                onClick={alParticipar}
+                className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
+                style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
+              >
+                {`${t('contacto.enlace')} >>`}
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -424,6 +449,8 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
 // Pantalla de la seccion de campanas mientras no haya ninguna abierta
 function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null }) {
   const { t } = useTranslation()
+  // El texto espera a que la imagen este descargada
+  const [lista, setLista] = useState(false)
 
   return (
     <div
@@ -434,26 +461,31 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
         src="/sin-campanas.webp"
         alt={t('campanas.titulo')}
         claseCaja="relative mt-[5cqw] h-[31cqh] w-full shrink-0"
+        alCargar={() => setLista(true)}
       />
       <div style={{ padding: '6cqw' }}>
-        <h2
-          className="font-mono uppercase text-accent"
-          style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
-        >
-          {t('campanas.titulo')}
-        </h2>
-        <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
-          {t('campanas.texto')}
-        </p>
-        {alParticipar && (
-          <button
-            type="button"
-            onClick={alParticipar}
-            className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
-            style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
-          >
-            {`${t('campanas.enlace')} >>`}
-          </button>
+        {lista && (
+          <>
+            <h2
+              className="font-mono uppercase text-accent"
+              style={{ fontSize: '7cqw', letterSpacing: '0.08em', marginBottom: '4cqw' }}
+            >
+              {t('campanas.titulo')}
+            </h2>
+            <p className="text-ink/80" style={{ fontSize: '6cqw', lineHeight: 1.65 }}>
+              {t('campanas.texto')}
+            </p>
+            {alParticipar && (
+              <button
+                type="button"
+                onClick={alParticipar}
+                className="cursor-pointer font-mono uppercase text-enlace transition-colors hover:text-accent"
+                style={{ fontSize: '4.2cqw', letterSpacing: '0.1em', marginTop: '6cqw' }}
+              >
+                {`${t('campanas.enlace')} >>`}
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>
