@@ -219,12 +219,10 @@ function Carrusel({
     >
       <div style={{ padding: '5cqw 5cqw 0' }}>
         {panel.imagen ? (
-          <img
+          <ImagenConAro
             src={panel.imagen}
             alt={t(`${base}.titulo`)}
-            width={900}
-            height={900}
-            className="aspect-square w-full object-cover"
+            claseCaja="relative aspect-square w-full"
           />
         ) : (
           <div
@@ -307,6 +305,44 @@ function Carrusel({
   )
 }
 
+// Imagen con aro de carga: el aro gira hasta que el navegador termina de
+// descargarla y entonces se retira. Sin esto, el hueco queda en negro
+function ImagenConAro({
+  src,
+  alt,
+  claseCaja,
+  claseImg = 'h-full w-full object-cover',
+  alDobleClic
+}: {
+  src: string
+  alt: string
+  claseCaja: string
+  claseImg?: string
+  alDobleClic?: () => void
+}) {
+  const [cargada, setCargada] = useState(false)
+
+  return (
+    <div className={claseCaja}>
+      {!cargada && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="aro" aria-hidden="true" />
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        width={900}
+        height={900}
+        className={claseImg}
+        onDoubleClick={alDobleClic}
+        onLoad={() => setCargada(true)}
+        onError={() => setCargada(true)}
+      />
+    </div>
+  )
+}
+
 // Direccion de contacto con boton de copiar. La usan la pantalla de contacto y
 // el panel que explica donde se envia la candidatura
 function BloqueCorreo() {
@@ -351,13 +387,10 @@ function PantallaContacto({ alParticipar }: { alParticipar: (() => void) | null 
       className="flex h-full w-full flex-col overflow-y-auto border border-crema bg-fondo"
       style={{ containerType: 'size' }}
     >
-      <img
+      <ImagenConAro
         src="/contacto.webp"
         alt={t('contacto.titulo')}
-        width={900}
-        height={900}
-        className="w-full object-cover"
-        style={{ height: '31cqh', marginTop: '5cqw' }}
+        claseCaja="relative mt-[5cqw] h-[31cqh] w-full shrink-0"
       />
       <div style={{ padding: '6cqw' }}>
         <h2
@@ -394,13 +427,10 @@ function PantallaCampanas({ alParticipar }: { alParticipar: (() => void) | null 
       className="flex h-full w-full flex-col overflow-y-auto border border-crema bg-fondo"
       style={{ containerType: 'size' }}
     >
-      <img
+      <ImagenConAro
         src="/sin-campanas.webp"
         alt={t('campanas.titulo')}
-        width={900}
-        height={900}
-        className="w-full object-cover"
-        style={{ height: '31cqh', marginTop: '5cqw' }}
+        claseCaja="relative mt-[5cqw] h-[31cqh] w-full shrink-0"
       />
       <div style={{ padding: '6cqw' }}>
         <h2
@@ -734,13 +764,12 @@ export default function App() {
         )}
 
         {!conEscena && !sinMedia && !enCampanas && !enContacto && !(rutaSub && PANELES[rutaSub]) && (
-          <img
+          <ImagenConAro
             src={portadaDe(lang)}
             alt={nombreActual}
-            width={720}
-            height={1606}
-            onDoubleClick={alternarPantallaCompleta}
-            className="h-full w-full border border-crema object-contain"
+            claseCaja="relative h-full w-full"
+            claseImg="h-full w-full border border-crema object-contain"
+            alDobleClic={alternarPantallaCompleta}
           />
         )}
       </div>
