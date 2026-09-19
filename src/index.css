@@ -65,6 +65,29 @@
   background: radial-gradient(ellipse 60% 45% at 50% 42%, rgb(227 169 74 / 0.09), transparent 70%);
 }
 
+/* Aro de carga: gira mientras la imagen no ha terminado de descargarse. Se mide
+   en cqw, asi que crece con el bloque que la contiene */
+@keyframes aro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.aro {
+  width: 20cqw;
+  height: 20cqw;
+  border: 1.6cqw solid var(--color-line);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: aro 0.9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aro {
+    animation: none;
+  }
+}
+
 @keyframes reveal {
   from {
     opacity: 0;
